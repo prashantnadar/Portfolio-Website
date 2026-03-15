@@ -1,16 +1,16 @@
-import { lazy, Suspense } from "react"
-import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
-import { ThemeProvider } from "./context/ThemeContext"
-import ErrorBoundary from "./components/ErrorBoundary"
+import { lazy, Suspense } from "react";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import { ThemeProvider } from "./context/ThemeContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Lazy loaded sections
-const Hero = lazy(() => import("./components/Hero"))
-const About = lazy(() => import("./components/About"))
-const Skills = lazy(() => import("./components/Skills"))
-const Experience = lazy(() => import("./components/Experience"))
-const Projects = lazy(() => import("./components/Projects"))
-const Contact = lazy(() => import("./components/Contact"))
+const Hero = lazy(() => import("./components/Hero"));
+const About = lazy(() => import("./components/About"));
+const Skills = lazy(() => import("./components/Skills"));
+const Experience = lazy(() => import("./components/Experience"));
+const Projects = lazy(() => import("./components/Projects"));
+const Contact = lazy(() => import("./components/Contact"));
 
 function App() {
   return (
@@ -41,6 +41,6 @@ function App() {
         <Footer />
       </div>
     </ThemeProvider>
-  )
+  );
 }
 export default App;
