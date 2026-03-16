@@ -10,14 +10,17 @@ export const personalInfo = {
 };
 
 export const skills = [
-  "React.js",
-  "TypeScript",
-  "JavaScript (ES6+)",
-  "Tailwind CSS",
-  "Redux",
-  "Context API",
   "HTML5",
   "CSS3",
+  "JavaScript (ES6+)",
+  "TypeScript",
+  "React",
+  "Tailwind CSS",
+  "Git",
+  "Rest API",
+  "FastAPI",
+  "PostgreSQL",
+  "MS SQL",
 ];
 
 export const projects = [
