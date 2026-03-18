@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ThemeProvider } from "./context/ThemeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import NeonClickEffect from "./components/NeonClickEffect";
 
 // Lazy loaded sections
 const Hero = lazy(() => import("./components/Hero"));
@@ -28,6 +29,7 @@ function App() {
                 </div>
               }
             >
+              <NeonClickEffect />
               <Hero />
               <About />
               <Skills />

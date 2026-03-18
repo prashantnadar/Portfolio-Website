@@ -7,3 +7,27 @@
 html {
   scroll-behavior: smooth;
 }
+
+@keyframes neonClick {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+    box-shadow: 0 0 10px cyan, 0 0 20px cyan, 0 0 30px cyan;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+    box-shadow: 0 0 20px cyan, 0 0 30px cyan, 0 0 40px cyan;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+    box-shadow: 0 0 0px cyan, 0 0 0px cyan, 0 0 0px cyan;
+  }
+}
+
+.animate-neonClick {
+  animation: neonClick 0.6s ease-out forwards;
+}

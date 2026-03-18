@@ -7,6 +7,7 @@ export const personalInfo = {
   email: "prashantnadar18@gmail.com",
   github: "https://github.com/prashantnadar",
   linkedin: "https://linkedin.com/in/parshya2210",
+  resume: "/Prashant_Frontend_Developer_Resume.pdf",
 };
 
 export const skills = [
@@ -24,6 +25,11 @@ export const skills = [
 ];
 
 export const projects = [
+    {
+    title: "Developer Portfolio Website",
+    description:
+      "Personal portfolio website built with React and responsive design.",
+  },
   {
     title: "React Dashboard Application",
     description:
@@ -33,10 +39,5 @@ export const projects = [
     title: "Task Management Web App",
     description:
       "Task management system with CRUD operations using Context API.",
-  },
-  {
-    title: "Developer Portfolio Website",
-    description:
-      "Personal portfolio website built with React and responsive design.",
   },
 ];
