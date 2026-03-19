@@ -6,6 +6,8 @@ export default function useGithubRepos() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+const ignoredRepos = ['prashantnadar', 'Portfolio-Website'];
+
   useEffect(() => {
     async function fetchRepos() {
       setLoading(true); // set loading to true when fetching
@@ -21,7 +23,7 @@ export default function useGithubRepos() {
 
          // Filter out the 'prashantnadar' repository and forked ones
         const filteredRepos = data
-          .filter(repo => !repo.fork && repo.name !== 'prashantnadar')  // Exclude forked and 'prashantnadar' repo
+          .filter( repo => !repo.fork && !ignoredRepos.includes(repo.name))  // Exclude forked and ignoredRepos array values Repos
           .slice(0, 6); // Limit to top 6 repositories
 
         setRepos(filteredRepos); // Set repos state with fetched data
