@@ -17,27 +17,13 @@ export const skills = [
   "TypeScript",
   "React",
   "Tailwind CSS",
+  "Bootstrap",
   "Git",
   "Rest API",
   "FastAPI",
   "PostgreSQL",
   "MS SQL",
-];
-
-export const projects = [
-    {
-    title: "Developer Portfolio Website",
-    description:
-      "Personal portfolio website built with React and responsive design.",
-  },
-  {
-    title: "React Dashboard Application",
-    description:
-      "Interactive dashboard built using React, TypeScript, Redux and Tailwind.",
-  },
-  {
-    title: "Task Management Web App",
-    description:
-      "Task management system with CRUD operations using Context API.",
-  },
+  "Canva",
+  "MS Excel",
+  "MS Word",
 ];

@@ -23,7 +23,7 @@ function Skills() {
                     <li
                         key={index}
                         title={skill}
-                        className="px-4 py-2 rounded-lg text-sm border border-gray-200 cursor-pointer hover:scale-110 shadow-md hover:bg-blue-400 hover:text-gray-100"
+                        className="px-4 py-2 font-serif rounded-lg text-sm border border-gray-200 cursor-pointer hover:scale-110 shadow-md hover:bg-blue-400 hover:text-gray-100"
                     >
                         {skill}
                     </li>

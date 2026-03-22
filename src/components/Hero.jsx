@@ -12,7 +12,7 @@ function Hero() {
 
             <h1
                 id="hero-heading"
-                className="max-w-4xl g-red-600 text-xl xs:text-xs sm:text-sm md:text-md lg:text-lg xl:text-4xl 2xl:text-4xl text-wrap font-bold mb-6"
+                className="max-w-4xl g-red-600 text-xl xs:text-xs sm:text-sm md:text-md lg:text-lg xl:text-4xl 2xl:text-4xl text-wrap font-sans font-bold mb-6"
             >
                 {/* Typewriter effect for your name */}
                 <Typewriter
