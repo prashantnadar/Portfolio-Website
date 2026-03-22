@@ -16,7 +16,7 @@ const Contact = lazy(() => import("./components/Contact"));
 function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen flex flex-col select-none">
+      <div className="min-h-screen flex flex-col">
         {/* Navigation */}
         <Navbar />
         {/* Main Content */}
