@@ -26,7 +26,7 @@ function About() {
                 <p
                     className={`leading-relaxed text-center ${theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"}`} // Dynamic text color based on theme
                 >
-                    Frontend Developer with 1.7+ years of experience building scalable and
+                    Frontend Developer with 1.8+ years of experience building scalable and
                     responsive web applications using React.js, TypeScript, JavaScript
                     (ES6+), and Tailwind CSS. Experienced in component-based architecture,
                     Redux and Context API state management, and REST API integration.
