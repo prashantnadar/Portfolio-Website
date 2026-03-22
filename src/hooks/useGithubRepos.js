@@ -17,11 +17,8 @@ const ignoredRepos = ['prashantnadar', 'Portfolio-Website'];
         );
         const data = await response.json();
         // console.log("repos data:",data);
-        // const filteredRepos = data
-        //   .filter((repo) => !repo.fork) // Exclude forked repositories
-        //   .slice(0, 6); // Limit to top 6 repositories
 
-         // Filter out the 'prashantnadar' repository and forked ones
+         // Filter out the ignoredRepos array repository and forked ones
         const filteredRepos = data
           .filter( repo => !repo.fork && !ignoredRepos.includes(repo.name))  // Exclude forked and ignoredRepos array values Repos
           .slice(0, 6); // Limit to top 6 repositories
