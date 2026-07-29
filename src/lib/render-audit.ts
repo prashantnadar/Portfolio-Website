@@ -1,54 +1,55 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 /**
- * Dev-only remount / re-render audit.
+ * Dev-only remount audit for motion wrappers.
  *
- * Motion wrappers should mount ONCE. If a component using this hook mounts more
- * than once in a session (especially while scrolling), something above it is
- * changing identity between renders — the classic cause of "blinking" sections.
+ * Each call site gets a stable per-instance id (React `useId`, which is derived
+ * from tree position and therefore survives a remount at the same spot). If the
+ * same instance mounts more than once — especially while scrolling — something
+ * above it is changing component identity between renders, which is the classic
+ * cause of "blinking" sections.
  *
- * Compiled away in production: every call site is guarded by `import.meta.env.DEV`.
+ * Every call site is guarded by `import.meta.env.DEV`, so this is stripped in prod.
  */
-const mountCounts = new Map<string, number>();
+const mounts = new Map<string, number>();
+const renders = new Map<string, number>();
 
 export function useRemountAudit(name: string, meta?: Record<string, unknown>) {
-  const renders = useRef(0);
-  renders.current += 1;
+  const instanceId = useId();
+  const key = `${name}${instanceId}`;
+  const reported = useRef(false);
+
+  renders.set(key, (renders.get(key) ?? 0) + 1);
 
   useEffect(() => {
     if (!import.meta.env.DEV) return;
-    const next = (mountCounts.get(name) ?? 0) + 1;
-    mountCounts.set(name, next);
-    const scrolling = typeof window !== "undefined" && window.scrollY > 0;
+    const count = (mounts.get(key) ?? 0) + 1;
+    mounts.set(key, count);
 
-    if (next > 1) {
+    if (count > 1 && !reported.current) {
+      reported.current = true;
       console.warn(
-        `[motion-audit] "${name}" remounted (mount #${next}${scrolling ? ", during scroll" : ""}).`,
+        `[motion-audit] ${name} remounted (mount #${count}${
+          typeof window !== "undefined" && window.scrollY > 0 ? ", during scroll" : ""
+        }) — its component identity is unstable.`,
         meta ?? {},
       );
     }
-
-    return () => {
-      if (!import.meta.env.DEV) return;
-      // Unmount during an active scroll is the signal we care about.
-      if (typeof window !== "undefined" && window.scrollY > 0) {
-        console.debug(`[motion-audit] "${name}" unmounted while scrolled.`);
-      }
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-    if (renders.current > 60) {
-      console.warn(`[motion-audit] "${name}" rendered ${renders.current} times — check memoization.`);
-      renders.current = 0;
-    }
-  });
+  }, [key]);
 }
 
-/** Dev helper: read the mount table from the console. */
+/** Console helpers: `__motionAudit()` and `__motionRenders()`. */
 if (import.meta.env.DEV && typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).__motionAudit = () =>
-    Object.fromEntries(mountCounts);
+  const w = window as unknown as Record<string, unknown>;
+  w.__motionAudit = () => {
+    const remounted = [...mounts.entries()].filter(([, n]) => n > 1);
+    return {
+      instances: mounts.size,
+      remounted: Object.fromEntries(remounted),
+      healthy: remounted.length === 0,
+    };
+  };
+  w.__motionRenders = () =>
+    Object.fromEntries([...renders.entries()].sort((a, b) => b[1] - a[1]).slice(0, 15));
 }
