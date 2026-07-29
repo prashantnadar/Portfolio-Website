@@ -17,14 +17,13 @@ export const NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
-  { label: "Playground", href: "#playground" },
-  { label: "Tools", href: "#tools" },
   { label: "Experience", href: "#experience" },
   { label: "Services", href: "#services" },
   { label: "Pricing", href: "#pricing" },
   { label: "Why Me", href: "#why-hire-me" },
   { label: "Contact", href: "#contact" },
 ] as const;
+
 
 
 export const SKILL_GROUPS: {
