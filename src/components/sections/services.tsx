@@ -219,42 +219,22 @@ export function Services() {
         </Reveal>
       </div>
 
-      {/* Visible FAQ — mirrors the FAQPage JSON-LD emitted on this route.
-          Native <details> so each item opens independently; first one starts open. */}
+      {/* Visible FAQ — mirrors the FAQPage JSON-LD emitted on this route. */}
       <div className="mx-auto mt-16 max-w-3xl">
         <Reveal className="text-center">
           <h3 id="faq" className="text-xl font-bold sm:text-2xl">
             Frequently asked questions
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Scope, timelines and how working with PN Creation actually goes.
+            Scope, timelines and how working with PN Creation actually goes. Use the arrow keys to
+            move between questions.
           </p>
         </Reveal>
-        <StaggerGroup className="mt-6 space-y-3" gap={0.05} aria-label="Frequently asked questions">
-          {FAQS.map((faq, i) => (
-            <motion.details
-              key={faq.q}
-              variants={fadeUp}
-              open={i === 0}
-              className="group rounded-2xl border border-border bg-card p-5 shadow-soft transition-colors hover:border-primary/40"
-            >
-              <summary
-                title={faq.q}
-                className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-semibold marker:hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-              >
-                <span className="min-w-0">{faq.q}</span>
-                <span
-                  aria-hidden="true"
-                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary/10 text-primary transition-transform duration-300 group-open:rotate-180"
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </span>
-              </summary>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
-            </motion.details>
-          ))}
+        <StaggerGroup className="mt-6" gap={0.05} aria-label="Frequently asked questions">
+          <FaqAccordion items={FAQS} />
         </StaggerGroup>
       </div>
+
 
 
 
