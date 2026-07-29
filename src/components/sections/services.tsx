@@ -4,7 +4,6 @@ import {
   BadgeCheck,
   Brush,
   CalendarHeart,
-  ChevronDown,
   Clock,
   FileText,
   Globe,
@@ -22,6 +21,7 @@ import type { LucideIcon } from "lucide-react";
 
 import { BrandLogo } from "@/components/brand-logo";
 import { Reveal, StaggerGroup, fadeUp, scaleIn } from "@/components/motion/reveal";
+import { FaqAccordion } from "@/components/faq-accordion";
 import { Section } from "@/components/section";
 import { handleAnchorClick } from "@/lib/scroll-to";
 import { FAQS, PRICING, SERVICES, SITE } from "@/lib/site-data";
