@@ -69,6 +69,28 @@ const PROJECTS: Project[] = [
     note: "Live in production, actively maintained — new tools ship regularly.",
   },
   {
+    title: "Power Consilium System",
+    subtitle: "power-consilium.com — Pan India UPS AMC & power infrastructure",
+    overview:
+      "A corporate website for Power Consilium System (PCS), a Mumbai-based UPS and power infrastructure company established in 2013. Founded by senior executives with card-level expertise across APC-MGE, Emerson and Numeric, the site presents pan-India AMC services, products and enquiry channels through a bold hero slider and conversion-focused layout.",
+    image: pcsImg,
+    avif: pcsAvif,
+    webp: pcsWebp,
+    alt: "Power Consilium System website hero showing Pan India UPS AMC and services",
+    stack: ["React", "Tailwind CSS", "Responsive UI", "Dark Mode", "SEO", "WhatsApp Integration"],
+    features: [
+      "Animated hero slider highlighting 1000+ UPS units managed across 70+ locations",
+      "Pan India UPS AMC services and card-level UPS repairing",
+      "Inverter sales & service plus tubular and SMF battery supply",
+      "Energy & power audit and wholesale UPS / battery supply",
+      "Multivendor support for APC, Emerson and Numeric equipment",
+      "24/7 remote monitoring & support with floating WhatsApp and call CTAs",
+      "Fully responsive with built-in dark mode",
+    ],
+    live: "https://power-consilium.com",
+    note: "Live corporate site — serving corporate and IT clients pan India since 2013.",
+  },
+  {
     title: "Ask Legal Vision",
     subtitle: "Live website for Adv. Aditya Shankar Kharche — Bombay High Court",
     overview:
@@ -88,19 +110,6 @@ const PROJECTS: Project[] = [
     ],
     live: "https://asklegalvision.in/",
     note: "Live in production and actively used by the practice for client enquiries.",
-  },
-  {
-    title: "Task Manager",
-    subtitle: "CRUD task application",
-    overview:
-      "A focused task manager covering the full CRUD cycle with Context API state, client-side routing and a responsive Tailwind interface.",
-    image: tasksImg,
-    avif: tasksAvif,
-    webp: tasksWebp,
-    alt: "Task manager application interface with task columns and an add task form",
-    stack: ["React", "Context API", "Routing", "Tailwind CSS"],
-    features: ["Create, read, update and delete tasks", "Global state with Context API", "Responsive, keyboard-friendly UI"],
-    github: SITE.github,
   },
 ];
 
