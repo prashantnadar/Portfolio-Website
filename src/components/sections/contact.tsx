@@ -36,15 +36,37 @@ const SOCIALS = [
 const fieldClass =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 
+// Client-side spam guards: max 3 sends per rolling window, 30s between sends.
+const RATE_LIMIT = { max: 3, windowMs: 10 * 60_000, cooldownMs: 30_000 };
+const RATE_KEY = "contact-submits";
+
+/** Reads recent submit timestamps from localStorage, dropping expired ones. */
+const recentSubmits = (): number[] => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(RATE_KEY) ?? "[]");
+    const now = Date.now();
+    return Array.isArray(raw)
+      ? raw.filter((t: unknown) => typeof t === "number" && now - t < RATE_LIMIT.windowMs)
+      : [];
+  } catch {
+    return [];
+  }
+};
+
 export function Contact() {
   const [values, setValues] = useState<ContactValues>(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  // Honeypot: real users never see or fill this field.
+  const [honeypot, setHoneypot] = useState("");
+  // Bots submit almost instantly — track when the form was first rendered.
+  const mountedAt = useRef(Date.now());
 
   const update = (key: keyof ContactValues, value: string) => {
     setValues((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
+
 
   /** SweetAlert2 themed to match the current light/dark palette. */
   const alert = async (opts: {
