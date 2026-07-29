@@ -82,24 +82,33 @@ function CaseStudyPage() {
   return (
     <div className="min-h-dvh overflow-x-hidden">
       <Navbar hideSectionLinks />
-      <main id="main" className="pt-28 pb-20 sm:pt-36">
+      <main id="main" className="pt-20 pb-20 sm:pt-24">
         <article className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
           <Reveal variants={fadeUp}>
-            <Link
-              to="/"
-              hash="projects"
-              title="Back to all projects"
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back to projects
-            </Link>
-            <span className="mt-6 inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.16em] text-primary uppercase">
-              Case study
-            </span>
-            <h1 className="mt-4 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+            {/* Breadcrumb replaces the old standalone "Case study" badge */}
+            <nav aria-label="Breadcrumb">
+              <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                <li>
+                  <Link
+                    to="/"
+                    hash="projects"
+                    title="Back to all projects"
+                    className="inline-flex items-center gap-1.5 font-medium transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  >
+                    <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                    Projects
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li className="font-medium text-foreground" aria-current="page">
+                  {project.title}
+                </li>
+              </ol>
+            </nav>
+            <h1 className="mt-3 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
               {project.title}
             </h1>
+
             <p className="mt-3 text-base leading-relaxed text-muted-foreground text-pretty">
               {cs.summary}
             </p>
