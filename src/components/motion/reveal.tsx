@@ -42,6 +42,20 @@ interface RevealProps {
   once?: boolean;
 }
 
+/**
+ * Motion components must be created once and cached. Calling motion.create()
+ * during render returns a brand-new component type on every render, which makes
+ * React unmount and remount the whole subtree — that shows up as flickering.
+ */
+const motionCache = new Map<ElementType, ElementType>();
+function getMotionTag(as: ElementType): ElementType {
+  const cached = motionCache.get(as);
+  if (cached) return cached;
+  const created = motion.create(as as never) as unknown as ElementType;
+  motionCache.set(as, created);
+  return created;
+}
+
 /** Scroll-triggered reveal wrapper used across every section. */
 export function Reveal({
   children,
@@ -51,7 +65,7 @@ export function Reveal({
   as = "div",
   once = true,
 }: RevealProps) {
-  const MotionTag = motion(as as ElementType);
+  const MotionTag = getMotionTag(as);
   return (
     <MotionTag
       className={className}
