@@ -87,7 +87,43 @@ export function Contact() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // 1) Honeypot / too-fast submit → silently reject as spam.
+    if (honeypot.trim() !== "" || Date.now() - mountedAt.current < 2500) {
+      await alert({
+        icon: "error",
+        title: "Submission blocked",
+        text: "This message looked automated and was blocked. If this was a mistake, please try again or reach me on WhatsApp.",
+        confirmButtonText: "Close",
+      });
+      return;
+    }
+
+    // 2) Rate limit: cap sends per window and enforce a short cooldown.
+    const history = recentSubmits();
+    const last = history[history.length - 1];
+    if (last && Date.now() - last < RATE_LIMIT.cooldownMs) {
+      const wait = Math.ceil((RATE_LIMIT.cooldownMs - (Date.now() - last)) / 1000);
+      await alert({
+        icon: "error",
+        title: "Slow down a moment",
+        text: `Please wait ${wait} second${wait === 1 ? "" : "s"} before sending another message.`,
+        confirmButtonText: "Okay",
+      });
+      return;
+    }
+    if (history.length >= RATE_LIMIT.max) {
+      await alert({
+        icon: "error",
+        title: "Too many messages",
+        text: "You've reached the limit of 3 messages. Please email or WhatsApp me directly and I'll reply there.",
+        confirmButtonText: "Close",
+      });
+      return;
+    }
+
     const parsed = contactSchema.safeParse(values);
+
     if (!parsed.success) {
       const next: FieldErrors = {};
       for (const issue of parsed.error.issues) {
