@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Braces, Copy, Terminal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { Reveal, fadeUp, scaleIn, slideLeft } from "@/components/motion/reveal";
+import { useRemountAudit } from "@/lib/render-audit";
 import { Section } from "@/components/section";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +37,12 @@ const SNIPPETS = [
 };`,
 ];
 
-function CodeConsole() {
+const CodeConsole = memo(function CodeConsole() {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useRemountAudit("CodeConsole");
+  }
+
   const [snippetIndex, setSnippetIndex] = useState(0);
   const [chars, setChars] = useState(0);
   const source = SNIPPETS[snippetIndex];
@@ -81,7 +87,7 @@ function CodeConsole() {
       </div>
     </Reveal>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* const prashant — interactive object explorer                        */
@@ -140,7 +146,12 @@ const TYPE_CLASS: Record<Entry["type"], string> = {
   number: "text-primary",
 };
 
-function ConstPrashant() {
+const ConstPrashant = memo(function ConstPrashant() {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useRemountAudit("ConstPrashant");
+  }
+
   const [active, setActive] = useState<string | null>(ENTRIES[0].key);
   const [copied, setCopied] = useState(false);
 
@@ -228,7 +239,7 @@ function ConstPrashant() {
       </div>
     </Reveal>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* npx prashant — animated terminal                                    */
@@ -244,7 +255,12 @@ const LINES = [
   { text: "→ Ready in 0.42s. Let's build yours.", tone: "note" },
 ] as const;
 
-function BuildTerminal() {
+const BuildTerminal = memo(function BuildTerminal() {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useRemountAudit("BuildTerminal");
+  }
+
   const [visible, setVisible] = useState(1);
 
   useEffect(() => {
@@ -288,7 +304,7 @@ function BuildTerminal() {
       </div>
     </Reveal>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 
