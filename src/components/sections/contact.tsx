@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import { Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useRef, useState, type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { FaGithub, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 import { z } from "zod";
 
 import { Reveal, StaggerGroup, fadeUp, slideRight } from "@/components/motion/reveal";
+import { submitContact } from "@/lib/contact.functions";
 import { Section } from "@/components/section";
 import { SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
@@ -54,6 +56,7 @@ const recentSubmits = (): number[] => {
 };
 
 export function Contact() {
+  const sendContact = useServerFn(submitContact);
   const [values, setValues] = useState<ContactValues>(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -142,14 +145,21 @@ export function Contact() {
 
     setSubmitting(true);
     try {
-      // Dummy backend: replace with a real endpoint when one is available.
-      await new Promise<void>((resolve, reject) =>
-        setTimeout(
-          () => (navigator.onLine === false ? reject(new Error("offline")) : resolve()),
-          900,
-        ),
-      );
-      // Record the successful send for the rate limiter.
+      // Server verifies honeypot + timing and enforces its own per-IP rate limit,
+      // logging every blocked attempt so spam patterns are visible in server logs.
+      const result = await sendContact({
+        data: { ...parsed.data, honeypot, elapsedMs: Date.now() - mountedAt.current },
+      });
+      if (!result.ok) {
+        await alert({
+          icon: "error",
+          title: result.reason === "rate_limit" ? "Too many messages" : "Submission blocked",
+          text: result.message ?? "Your message could not be sent. Please try WhatsApp or email.",
+          confirmButtonText: "Close",
+        });
+        return;
+      }
+      // Record the successful send for the client-side rate limiter.
       try {
         localStorage.setItem(RATE_KEY, JSON.stringify([...history, Date.now()]));
       } catch {
