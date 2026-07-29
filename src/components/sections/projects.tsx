@@ -34,6 +34,28 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title: "Ask Legal Vision",
+    subtitle: "Live website for Adv. Aditya Shankar Kharche — Bombay High Court",
+    overview:
+      "A production legal-services website for a Bombay High Court advocate with 20+ years in employment law, civil litigation and compliance. Built around a strong \"Precision Legal Strategy for a Fast-Moving World\" hero, clear consultation CTAs, service breakdown, testimonials and direct contact — backed by a MySQL (phpMyAdmin) driven enquiry flow.",
+    image: legalImg,
+    avif: legalAvif,
+    webp: legalWebp,
+    alt: "Ask Legal Vision website homepage with hero section and practice areas",
+    stack: ["React (JSX)", "Tailwind CSS", "PHP", "MySQL / phpMyAdmin", "Responsive UI", "SEO"],
+    features: [
+      "Hero with Book a Consultation and Call Now conversion CTAs",
+      "About section for Adv. Aditya Shankar Kharche — 20+ years, Bar Council of Maharashtra & Goa",
+      "Five service areas: property litigation, employment & labour law, corporate & HR legal advisory, legal drafting & compliance, and legal trainings",
+      "Client testimonials plus phone and email contact for direct enquiries",
+      "MySQL-backed enquiry storage managed through phpMyAdmin",
+      "Fully responsive across mobile, tablet and desktop with fast first paint",
+    ],
+    live: "https://asklegalvision.in/",
+    featured: true,
+    note: "Live in production and actively used by the practice for client enquiries.",
+  },
+  {
     title: "Universal Tools",
     subtitle: "Multi-utility platform",
     overview:
@@ -50,25 +72,7 @@ const PROJECTS: Project[] = [
     ],
     live: "https://universaltools.in",
     github: SITE.github,
-    featured: true,
     note: "100+ tools planned. New tools are continuously being added.",
-  },
-  {
-    title: "Ask Legal Vision",
-    subtitle: "Production website for a Bombay High Court Advocate",
-    overview:
-      "A live legal-services website structured around services, consultation and testimonials, with performance tuning for fast load times on mobile networks.",
-    image: legalImg,
-    avif: legalAvif,
-    webp: legalWebp,
-    alt: "Ask Legal Vision website homepage with hero section and practice areas",
-    stack: ["React", "Tailwind CSS", "Responsive UI", "SEO"],
-    features: [
-      "Service, consultation and testimonial sections structured for engagement",
-      "Optimised assets and fast first paint",
-      "Semantic, accessible markup for better search visibility",
-    ],
-    live: "https://asklegalvision.in/",
   },
   {
     title: "Task Manager",
