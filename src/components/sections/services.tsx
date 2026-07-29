@@ -55,16 +55,14 @@ export function Services() {
         variants={scaleIn}
         className="mx-auto mb-12 flex max-w-3xl flex-col items-center gap-5 rounded-3xl border border-border bg-card p-6 text-center shadow-soft sm:flex-row sm:gap-7 sm:p-8 sm:text-left"
       >
-        <motion.img
-          src={logo.url}
-          alt="PN Creation logo"
-          loading="lazy"
-          width={128}
-          height={128}
+        <motion.div
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-2 dark:bg-white"
-        />
+          className="shrink-0"
+        >
+          <BrandLogo size={96} className="rounded-2xl p-1.5 shadow-soft" />
+        </motion.div>
+
         <div className="min-w-0">
           <h3 className="text-xl font-semibold">PN Creation</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
