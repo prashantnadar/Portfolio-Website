@@ -130,10 +130,39 @@ export function Footer() {
           className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-center text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:text-left lg:px-8"
         >
           <p>© {new Date().getFullYear()} Prashant Nadar. All rights reserved.</p>
-          <p className="inline-flex items-center justify-center gap-2 sm:justify-end">
-            Freelance Services powered by{" "}
-            <span className="font-semibold text-primary">PN Creation</span>.
+          {/* Signature line — name is blue by default and gets a highlight sweep on scroll-in */}
+          <p className="inline-flex flex-wrap items-center justify-center gap-1.5 sm:justify-end">
+            <span>Made with</span>
+            <span aria-hidden="true">💓</span>
+            <span className="sr-only">love</span>
+            <span>by</span>
+            <motion.a
+              href="https://instagram.com/prashant_Dev_22/"
+              target="_blank"
+              rel="noreferrer noopener"
+              title="Prashant Nadar on Instagram"
+              aria-label="Prashant Nadar on Instagram (opens in a new tab)"
+              initial={{ backgroundSize: "0% 100%" }}
+              whileInView={{ backgroundSize: "100% 100%" }}
+              viewport={{ once: true, amount: 0.6 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, hsl(var(--primary) / 0.18), hsl(var(--primary) / 0.18))",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "left center",
+              }}
+              className="rounded px-1 font-semibold text-primary underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              Prashant
+            </motion.a>
+            <span>·</span>
+            <span>
+              Freelance Services powered by{" "}
+              <span className="font-semibold text-primary">PN Creation</span>.
+            </span>
           </p>
+
         </motion.div>
       </div>
     </footer>
