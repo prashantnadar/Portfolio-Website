@@ -106,14 +106,17 @@ export function Projects() {
           >
             <div className="relative overflow-hidden">
               <div className={cn("aspect-video w-full", project.featured && "lg:aspect-[21/9]")}>
-                <img
+                <ResponsiveImage
                   src={project.image}
+                  avif={project.avif}
+                  webp={project.webp}
                   alt={project.alt}
-                  loading="lazy"
                   width={1200}
                   height={800}
+                  sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
                   className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                 />
+
               </div>
               {project.featured ? (
                 <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
