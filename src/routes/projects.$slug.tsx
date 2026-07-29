@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { Reveal, StaggerGroup, fadeUp } from "@/components/motion/reveal";
 import { ResponsiveImage } from "@/components/responsive-image";
-import { PROJECTS, getProject } from "@/lib/projects-data";
+import { PROJECTS, getProject, type Project } from "@/lib/projects-data";
 
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/projects/$slug")({
 });
 
 function CaseStudyPage() {
-  const { project } = Route.useLoaderData();
+  const { project } = Route.useLoaderData() as { project: Project };
   const cs = project.caseStudy;
   const others = PROJECTS.filter((p) => p.slug !== project.slug);
 
