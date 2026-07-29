@@ -52,23 +52,19 @@ export function Navbar({ hideSectionLinks = false }: NavbarProps) {
         {hideSectionLinks ? (
           <Link
             to="/"
-            className="flex min-w-0 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            aria-label="Prashant Nadar — home"
+            className="flex min-w-0 items-center rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             <PNMark size={36} />
-            <span className="truncate font-display text-base font-semibold tracking-tight">
-              Prashant<span className="text-primary">.</span>
-            </span>
           </Link>
         ) : (
           <a
             href="#home"
+            aria-label="Prashant Nadar — home"
             onClick={(e) => handleAnchorClick(e, "#home")}
-            className="flex min-w-0 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className="flex min-w-0 items-center rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
             <PNMark size={36} />
-            <span className="truncate font-display text-base font-semibold tracking-tight">
-              Prashant<span className="text-primary">.</span>
-            </span>
           </a>
         )}
 
