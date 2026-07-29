@@ -17,7 +17,10 @@ export const Route = createFileRoute("/projects/$slug")({
     const project = loaderData?.project;
     if (!project) {
       return {
-        meta: [{ title: "Case study not found — Prashant Nadar" }, { name: "robots", content: "noindex" }],
+        meta: [
+          { title: "Case study not found — Prashant Nadar" },
+          { name: "robots", content: "noindex" },
+        ],
       };
     }
     const title = `${project.title} Case Study — Prashant Nadar`;
@@ -107,7 +110,10 @@ function CaseStudyPage() {
                 { k: "Timeline", v: cs.timeline },
                 { k: "Status", v: project.note ? "Live in production" : "Delivered" },
               ].map((row) => (
-                <div key={row.k} className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+                <div
+                  key={row.k}
+                  className="rounded-2xl border border-border bg-card p-4 shadow-soft"
+                >
                   <dt className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
                     {row.k}
                   </dt>
@@ -180,7 +186,10 @@ function CaseStudyPage() {
             <ul className="mt-6 space-y-3" aria-label="Outcomes">
               {cs.outcome.map((o) => (
                 <li key={o} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  <CheckCircle2
+                    className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                    aria-hidden="true"
+                  />
                   <span>{o}</span>
                 </li>
               ))}
@@ -191,7 +200,10 @@ function CaseStudyPage() {
             <h2 id="stack" className="text-2xl font-semibold">
               Tech stack
             </h2>
-            <ul className="mt-4 flex flex-wrap gap-2" aria-label={`${project.title} technologies used`}>
+            <ul
+              className="mt-4 flex flex-wrap gap-2"
+              aria-label={`${project.title} technologies used`}
+            >
               {project.stack.map((tech) => (
                 <li
                   key={tech}
@@ -254,7 +266,10 @@ function CaseSection({
             key={item}
             className="flex gap-3 rounded-2xl border border-border bg-card p-4 text-sm leading-relaxed text-muted-foreground shadow-soft"
           >
-            <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            <span
+              aria-hidden="true"
+              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
+            />
             <span>{item}</span>
           </li>
         ))}

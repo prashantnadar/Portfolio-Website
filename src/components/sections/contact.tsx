@@ -47,7 +47,12 @@ export function Contact() {
   };
 
   /** SweetAlert2 themed to match the current light/dark palette. */
-  const alert = async (opts: { icon: "success" | "error"; title: string; text: string; confirmButtonText: string }) => {
+  const alert = async (opts: {
+    icon: "success" | "error";
+    title: string;
+    text: string;
+    confirmButtonText: string;
+  }) => {
     const Swal = (await import("sweetalert2")).default;
     const isDark = document.documentElement.classList.contains("dark");
     await Swal.fire({
@@ -81,7 +86,10 @@ export function Contact() {
     try {
       // Dummy backend: replace with a real endpoint when one is available.
       await new Promise<void>((resolve, reject) =>
-        setTimeout(() => (navigator.onLine === false ? reject(new Error("offline")) : resolve()), 900),
+        setTimeout(
+          () => (navigator.onLine === false ? reject(new Error("offline")) : resolve()),
+          900,
+        ),
       );
       await alert({
         icon: "success",
@@ -241,7 +249,11 @@ export function Contact() {
                 className={cn(fieldClass, "resize-y", errors.message && "border-destructive")}
               />
               {errors.message ? (
-                <p id="message-error" role="alert" className="mt-2 text-xs font-medium text-destructive">
+                <p
+                  id="message-error"
+                  role="alert"
+                  className="mt-2 text-xs font-medium text-destructive"
+                >
                   {errors.message}
                 </p>
               ) : null}

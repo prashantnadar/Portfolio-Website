@@ -33,14 +33,30 @@ export function Projects() {
             <div className="relative border-b border-border bg-surface p-3 sm:p-4">
               <div className="overflow-hidden rounded-xl border border-border bg-background shadow-soft">
                 <div className="flex items-center gap-2 border-b border-border bg-surface px-3 py-2">
-                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
-                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span
+                    aria-hidden="true"
+                    className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30"
+                  />
                   <span className="ml-2 truncate text-[11px] font-medium text-muted-foreground">
-                    {project.live ? project.live.replace(/^https?:\/\//, "").replace(/\/$/, "") : "local preview"}
+                    {project.live
+                      ? project.live.replace(/^https?:\/\//, "").replace(/\/$/, "")
+                      : "local preview"}
                   </span>
                 </div>
-                <div className={cn("aspect-video w-full overflow-hidden", project.featured && "lg:aspect-[21/9]")}>
+                <div
+                  className={cn(
+                    "aspect-video w-full overflow-hidden",
+                    project.featured && "lg:aspect-[21/9]",
+                  )}
+                >
                   <ResponsiveImage
                     src={project.image}
                     avif={project.avif}
@@ -48,7 +64,11 @@ export function Projects() {
                     alt={project.alt}
                     width={1200}
                     height={800}
-                    sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
+                    sizes={
+                      project.featured
+                        ? "(min-width: 1024px) 1100px, 100vw"
+                        : "(min-width: 1024px) 560px, 100vw"
+                    }
                     className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
@@ -62,11 +82,16 @@ export function Projects() {
             </div>
 
             <div className="flex flex-1 flex-col p-6 sm:p-7">
-              <h3 id={`project-${project.slug}-title`} className="text-xl font-semibold text-balance sm:text-2xl">
+              <h3
+                id={`project-${project.slug}-title`}
+                className="text-xl font-semibold text-balance sm:text-2xl"
+              >
                 {project.title}
               </h3>
               <p className="mt-1 text-sm font-medium text-primary">{project.subtitle}</p>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{project.overview}</p>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                {project.overview}
+              </p>
 
               {/* Labelled blocks keep highlights and stack visually distinct from the preview */}
               <div className="mt-6 rounded-2xl border border-border bg-surface/60 p-4 sm:p-5">
@@ -96,7 +121,10 @@ export function Projects() {
                 <h4 className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
                   Tech stack
                 </h4>
-                <ul className="mt-3 flex flex-wrap gap-2" aria-label={`${project.title} tech stack`}>
+                <ul
+                  className="mt-3 flex flex-wrap gap-2"
+                  aria-label={`${project.title} tech stack`}
+                >
                   {project.stack.map((tech) => (
                     <li
                       key={tech}
