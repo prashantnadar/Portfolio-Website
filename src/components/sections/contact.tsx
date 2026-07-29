@@ -46,6 +46,18 @@ export function Contact() {
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
+  /** SweetAlert2 themed to match the current light/dark palette. */
+  const alert = async (opts: { icon: "success" | "error"; title: string; text: string; confirmButtonText: string }) => {
+    const Swal = (await import("sweetalert2")).default;
+    const isDark = document.documentElement.classList.contains("dark");
+    await Swal.fire({
+      ...opts,
+      background: isDark ? "#1c2331" : "#ffffff",
+      color: isDark ? "#f2f4f8" : "#1b2130",
+      confirmButtonColor: "#2f62d8",
+    });
+  };
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const parsed = contactSchema.safeParse(values);
@@ -56,26 +68,38 @@ export function Contact() {
         if (!next[key]) next[key] = issue.message;
       }
       setErrors(next);
+      await alert({
+        icon: "error",
+        title: "Check the form",
+        text: "A few fields need fixing before the message can be sent.",
+        confirmButtonText: "Got it",
+      });
       return;
     }
 
     setSubmitting(true);
-    // Dummy backend: replace with a real endpoint when one is available.
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setSubmitting(false);
-
-    const Swal = (await import("sweetalert2")).default;
-    const isDark = document.documentElement.classList.contains("dark");
-    await Swal.fire({
-      icon: "success",
-      title: "Message sent",
-      text: `Thanks ${parsed.data.name}, I'll get back to you within 24 hours.`,
-      confirmButtonText: "Great",
-      background: isDark ? "#1c2331" : "#ffffff",
-      color: isDark ? "#f2f4f8" : "#1b2130",
-      confirmButtonColor: "#2f62d8",
-    });
-    setValues(EMPTY);
+    try {
+      // Dummy backend: replace with a real endpoint when one is available.
+      await new Promise<void>((resolve, reject) =>
+        setTimeout(() => (navigator.onLine === false ? reject(new Error("offline")) : resolve()), 900),
+      );
+      await alert({
+        icon: "success",
+        title: "Message sent",
+        text: `Thanks ${parsed.data.name}, I'll get back to you within 24 hours.`,
+        confirmButtonText: "Great",
+      });
+      setValues(EMPTY);
+    } catch {
+      await alert({
+        icon: "error",
+        title: "Message not sent",
+        text: "Something went wrong while sending. Please try again, or reach me directly on WhatsApp or email.",
+        confirmButtonText: "Close",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -92,6 +116,8 @@ export function Contact() {
             <motion.a
               key={label}
               href={href}
+              title={`${label}: ${value}`}
+              aria-label={`${label}: ${value}`}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noreferrer noopener" : undefined}
               variants={fadeUp}
@@ -125,7 +151,8 @@ export function Contact() {
                     href={href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    aria-label={label}
+                    aria-label={`${label} profile (opens in a new tab)`}
+                    title={label}
                     whileHover={{ y: -3, scale: 1.06 }}
                     className="grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-full border border-border bg-surface text-foreground transition-colors hover:border-primary/45 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                   >
@@ -158,6 +185,8 @@ export function Contact() {
           <form
             onSubmit={onSubmit}
             noValidate
+            aria-label="Contact Prashant Nadar"
+            aria-busy={submitting}
             className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
           >
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -168,6 +197,7 @@ export function Contact() {
                 error={errors.name}
                 onChange={(v) => update("name", v)}
                 placeholder="Your full name"
+                autoComplete="name"
               />
               <Field
                 id="email"
@@ -177,6 +207,7 @@ export function Contact() {
                 error={errors.email}
                 onChange={(v) => update("email", v)}
                 placeholder="you@example.com"
+                autoComplete="email"
               />
             </div>
             <div className="mt-5">
@@ -187,6 +218,7 @@ export function Contact() {
                 error={errors.subject}
                 onChange={(v) => update("subject", v)}
                 placeholder="Project, role or collaboration"
+                autoComplete="off"
               />
             </div>
             <div className="mt-5">
@@ -197,6 +229,10 @@ export function Contact() {
                 id="message"
                 rows={5}
                 maxLength={1000}
+                required
+                autoComplete="off"
+                aria-label="Message"
+                aria-required="true"
                 value={values.message}
                 onChange={(e) => update("message", e.target.value)}
                 aria-invalid={Boolean(errors.message)}
@@ -214,6 +250,8 @@ export function Contact() {
             <motion.button
               type="submit"
               disabled={submitting}
+              title="Send your message"
+              aria-label={submitting ? "Sending your message" : "Send your message"}
               whileHover={{ y: submitting ? 0 : -3 }}
               whileTap={{ scale: submitting ? 1 : 0.97 }}
               className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-70 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:w-auto"
@@ -240,6 +278,7 @@ function Field({
   onChange,
   placeholder,
   type = "text",
+  autoComplete,
 }: {
   id: string;
   label: string;
@@ -248,6 +287,7 @@ function Field({
   onChange: (value: string) => void;
   placeholder?: string;
   type?: string;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -259,6 +299,9 @@ function Field({
         type={type}
         value={value}
         maxLength={255}
+        required
+        autoComplete={autoComplete}
+        aria-required="true"
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         aria-invalid={Boolean(error)}
