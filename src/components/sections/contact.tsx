@@ -149,6 +149,12 @@ export function Contact() {
           900,
         ),
       );
+      // Record the successful send for the rate limiter.
+      try {
+        localStorage.setItem(RATE_KEY, JSON.stringify([...history, Date.now()]));
+      } catch {
+        /* storage unavailable — skip rate tracking */
+      }
       await alert({
         icon: "success",
         title: "Message sent",
@@ -156,6 +162,7 @@ export function Contact() {
         confirmButtonText: "Great",
       });
       setValues(EMPTY);
+
     } catch {
       await alert({
         icon: "error",
