@@ -19,7 +19,7 @@ const SOCIALS = [
 const STATS = [
   { value: "2+", label: "Years building UIs" },
   { value: "5+", label: "Modules shipped" },
-  { value: "20+", label: "Tools in Universal Tools" },
+  { value: "100+", label: "Tools in Universal Tools" },
 ];
 
 export function Hero() {

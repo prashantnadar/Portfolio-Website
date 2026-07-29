@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { BrandLogo } from "@/components/brand-logo";
+import { PNMark } from "@/components/pn-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useScrollSpy } from "@/hooks/use-scroll-spy";
 import { handleAnchorClick } from "@/lib/scroll-to";
@@ -54,7 +54,7 @@ export function Navbar({ hideSectionLinks = false }: NavbarProps) {
             to="/"
             className="flex min-w-0 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
-            <BrandLogo size={36} priority className="shrink-0 p-0.5 shadow-soft" />
+            <PNMark size={36} />
             <span className="truncate font-display text-base font-semibold tracking-tight">
               Prashant<span className="text-primary">.</span>
             </span>
@@ -65,7 +65,7 @@ export function Navbar({ hideSectionLinks = false }: NavbarProps) {
             onClick={(e) => handleAnchorClick(e, "#home")}
             className="flex min-w-0 items-center gap-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
-            <BrandLogo size={36} priority className="shrink-0 p-0.5 shadow-soft" />
+            <PNMark size={36} />
             <span className="truncate font-display text-base font-semibold tracking-tight">
               Prashant<span className="text-primary">.</span>
             </span>

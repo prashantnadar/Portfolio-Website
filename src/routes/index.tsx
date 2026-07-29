@@ -91,7 +91,7 @@ const STRUCTURED_DATA = {
       email: `mailto:${SITE.email}`,
       telephone: SITE.phone,
       url: SITE.portfolio,
-      image: "/pn-logo.png",
+      image: "/pn-monogram.svg",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Mumbai",
