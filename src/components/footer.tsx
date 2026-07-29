@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Phone } from "lucide-react";
 import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
-import { BrandLogo } from "@/components/brand-logo";
+import { PNMark } from "@/components/pn-mark";
 import { handleAnchorClick } from "@/lib/scroll-to";
 import { SITE } from "@/lib/site-data";
 
@@ -32,7 +32,7 @@ export function Footer() {
             onClick={(e) => handleAnchorClick(e, "#home")}
             className="flex items-center gap-2.5"
           >
-            <BrandLogo size={44} className="shadow-soft" />
+            <PNMark size={44} />
             <span className="font-display text-base font-semibold">Prashant Nadar</span>
           </a>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
@@ -131,7 +131,6 @@ export function Footer() {
         >
           <p>© {new Date().getFullYear()} Prashant Nadar. All rights reserved.</p>
           <p className="inline-flex items-center justify-center gap-2 sm:justify-end">
-            <BrandLogo size={22} className="rounded-md" />
             Freelance Services powered by{" "}
             <span className="font-semibold text-primary">PN Creation</span>.
           </p>
