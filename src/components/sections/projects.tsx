@@ -48,6 +48,7 @@ const PROJECTS: Project[] = [
       "Lazy-loaded modular routing for a lean initial bundle",
       "Scalable reusable architecture built for continuous expansion",
     ],
+    live: "https://universaltools.in",
     github: SITE.github,
     featured: true,
     note: "100+ tools planned. New tools are continuously being added.",

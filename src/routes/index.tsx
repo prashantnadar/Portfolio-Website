@@ -20,6 +20,9 @@ const Skills = lazy(() =>
 const Playground = lazy(() =>
   import("@/components/sections/playground").then((m) => ({ default: m.Playground })),
 );
+const UniversalToolsPromo = lazy(() =>
+  import("@/components/sections/universal-tools").then((m) => ({ default: m.UniversalToolsPromo })),
+);
 const Experience = lazy(() =>
   import("@/components/sections/experience").then((m) => ({ default: m.Experience })),
 );
@@ -48,6 +51,7 @@ const PROJECT_ENTITIES = [
     "@type": "SoftwareApplication",
     "@id": "/#universal-tools",
     name: "Universal Tools",
+    url: "https://universaltools.in",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Web",
     description:
@@ -234,6 +238,9 @@ function Index() {
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Playground />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <UniversalToolsPromo />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
           <Experience />
