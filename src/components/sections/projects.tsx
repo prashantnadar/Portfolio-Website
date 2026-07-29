@@ -1,10 +1,17 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Star } from "lucide-react";
 
-import legalImg from "@/assets/project-legal.jpg";
-import tasksImg from "@/assets/project-tasks.jpg";
-import toolsImg from "@/assets/project-tools.jpg";
+import legalAvif from "@/assets/project-legal.jpg?w=640;960;1440&format=avif&as=srcset";
+import legalImg from "@/assets/project-legal.jpg?w=1024&format=jpg";
+import legalWebp from "@/assets/project-legal.jpg?w=640;960;1440&format=webp&as=srcset";
+import tasksAvif from "@/assets/project-tasks.jpg?w=640;960;1440&format=avif&as=srcset";
+import tasksImg from "@/assets/project-tasks.jpg?w=1024&format=jpg";
+import tasksWebp from "@/assets/project-tasks.jpg?w=640;960;1440&format=webp&as=srcset";
+import toolsAvif from "@/assets/project-tools.jpg?w=640;960;1440&format=avif&as=srcset";
+import toolsImg from "@/assets/project-tools.jpg?w=1024&format=jpg";
+import toolsWebp from "@/assets/project-tools.jpg?w=640;960;1440&format=webp&as=srcset";
 import { StaggerGroup, fadeUp } from "@/components/motion/reveal";
+import { ResponsiveImage } from "@/components/responsive-image";
 import { Section } from "@/components/section";
 import { SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
@@ -14,6 +21,8 @@ interface Project {
   subtitle: string;
   overview: string;
   image: string;
+  avif: string;
+  webp: string;
   alt: string;
   stack: string[];
   features: string[];
@@ -30,6 +39,8 @@ const PROJECTS: Project[] = [
     overview:
       "A growing multi-utility platform bundling developer, SEO, productivity and design tools behind one fast, modular interface. Routes are lazy loaded and each tool is an isolated, reusable module.",
     image: toolsImg,
+    avif: toolsAvif,
+    webp: toolsWebp,
     alt: "Universal Tools dashboard showing categorised developer, SEO and design tool cards",
     stack: ["React", "TypeScript", "Tailwind CSS", "Lazy Loading", "Modular Architecture"],
     features: [
@@ -47,6 +58,8 @@ const PROJECTS: Project[] = [
     overview:
       "A live legal-services website structured around services, consultation and testimonials, with performance tuning for fast load times on mobile networks.",
     image: legalImg,
+    avif: legalAvif,
+    webp: legalWebp,
     alt: "Ask Legal Vision website homepage with hero section and practice areas",
     stack: ["React", "Tailwind CSS", "Responsive UI", "SEO"],
     features: [
@@ -62,6 +75,8 @@ const PROJECTS: Project[] = [
     overview:
       "A focused task manager covering the full CRUD cycle with Context API state, client-side routing and a responsive Tailwind interface.",
     image: tasksImg,
+    avif: tasksAvif,
+    webp: tasksWebp,
     alt: "Task manager application interface with task columns and an add task form",
     stack: ["React", "Context API", "Routing", "Tailwind CSS"],
     features: ["Create, read, update and delete tasks", "Global state with Context API", "Responsive, keyboard-friendly UI"],
@@ -91,14 +106,17 @@ export function Projects() {
           >
             <div className="relative overflow-hidden">
               <div className={cn("aspect-video w-full", project.featured && "lg:aspect-[21/9]")}>
-                <img
+                <ResponsiveImage
                   src={project.image}
+                  avif={project.avif}
+                  webp={project.webp}
                   alt={project.alt}
-                  loading="lazy"
                   width={1200}
                   height={800}
+                  sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
                   className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                 />
+
               </div>
               {project.featured ? (
                 <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">

@@ -3,7 +3,10 @@ import { ArrowRight, MapPin, Sparkles } from "lucide-react";
 import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa6";
 
 import { Reveal, StaggerGroup, fadeUp, scaleIn } from "@/components/motion/reveal";
+import { Typewriter } from "@/components/typewriter";
+import { handleAnchorClick } from "@/lib/scroll-to";
 import { SITE } from "@/lib/site-data";
+
 
 const ROLES = ["Frontend Developer", "React Developer", "Freelance Web Developer"];
 
@@ -53,16 +56,15 @@ export function Hero() {
             Prashant <span className="text-gradient">Nadar</span>
           </motion.h1>
 
-          <motion.ul variants={fadeUp} className="mt-5 flex flex-wrap items-center gap-2">
-            {ROLES.map((role) => (
-              <li
-                key={role}
-                className="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-muted-foreground"
-              >
-                {role}
-              </li>
-            ))}
-          </motion.ul>
+
+          <motion.p
+            variants={fadeUp}
+            className="mt-4 font-mono text-base font-semibold text-foreground sm:text-xl"
+          >
+            <span className="text-primary">&gt;</span>{" "}
+            <Typewriter words={ROLES} typeSpeed={62} deleteSpeed={30} />
+          </motion.p>
+
 
           <motion.p
             variants={fadeUp}
@@ -76,6 +78,7 @@ export function Hero() {
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.a
               href="#contact"
+              onClick={(e) => handleAnchorClick(e, "#contact")}
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.96 }}
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
@@ -88,6 +91,7 @@ export function Hero() {
             </motion.a>
             <motion.a
               href="#projects"
+              onClick={(e) => handleAnchorClick(e, "#projects")}
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.96 }}
               className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
@@ -96,6 +100,7 @@ export function Hero() {
             </motion.a>
             <motion.a
               href="#contact"
+              onClick={(e) => handleAnchorClick(e, "#contact")}
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.96 }}
               className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-primary underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"

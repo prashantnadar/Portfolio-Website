@@ -17,10 +17,14 @@ export const NAV_LINKS = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
+  { label: "Playground", href: "#playground" },
   { label: "Experience", href: "#experience" },
   { label: "Services", href: "#services" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Why Me", href: "#why-hire-me" },
   { label: "Contact", href: "#contact" },
 ] as const;
+
 
 export const SKILL_GROUPS: {
   category: string;
@@ -158,43 +162,117 @@ export const PRICING = [
   {
     tier: "Basic",
     price: "₹10,000 – ₹15,000",
-    tagline: "For a clean, single-page presence.",
+    period: "one-time project",
+    tagline: "A sharp one-page presence that makes you look established from day one.",
+    bestFor: "Best for new businesses, freelancers and single-service brands",
+    timeline: "Delivered in 5–7 days",
+    revisions: "2 rounds of revisions",
+    support: "15 days of post-launch support",
     features: [
-      "Single-page responsive website",
-      "Up to 5 sections",
-      "Contact form + WhatsApp button",
-      "Basic SEO meta setup",
-      "Deployment support",
+      "Single-page responsive website, hand-built in React + Tailwind",
+      "Up to 5 conversion-focused sections (hero, services, about, gallery, contact)",
+      "Enquiry form with email delivery plus a one-tap WhatsApp button",
+      "On-page SEO basics: titles, meta descriptions, Open Graph and favicon",
+      "Mobile-first layout tested from 320px phones to large desktops",
+      "Free deployment, domain connection and SSL setup",
     ],
     highlighted: false,
   },
   {
     tier: "Pro",
     price: "₹20,000 – ₹30,000",
-    tagline: "For growing businesses that need more.",
+    period: "one-time project",
+    tagline: "A complete multi-page website built to win enquiries, not just look good.",
+    bestFor: "Best for growing businesses, clinics, studios and service companies",
+    timeline: "Delivered in 10–14 days",
+    revisions: "4 rounds of revisions",
+    support: "1 month of free support & content edits",
     features: [
-      "Multi-page business website",
-      "Custom UI design & animations",
-      "Gallery / services / testimonials",
-      "SEO + Google Business Profile setup",
-      "1 month of free support",
+      "Everything in Basic, expanded across a multi-page site",
+      "Up to 6 pages — home, services, about, gallery, testimonials, contact",
+      "Custom UI design with Framer Motion scroll and hover animations",
+      "Google Business Profile setup plus Google Maps and Analytics integration",
+      "Full technical SEO: sitemap, robots.txt, structured data and image optimisation",
+      "Blog or gallery structure you can keep adding to",
+      "Lighthouse tuning targeting 90+ across the board",
     ],
     highlighted: false,
   },
   {
     tier: "Pro Max",
-    price: "Starting from ₹35,000",
-    tagline: "Fully custom, built to scale.",
+    price: "From ₹35,000",
+    period: "custom scope",
+    tagline: "A fully custom product experience engineered to scale with your business.",
+    bestFor: "Best for funded startups, marketplaces and dashboard-style products",
+    timeline: "Timeline planned per scope",
+    revisions: "Unlimited revisions within scope",
+    support: "3 months of priority support",
     features: [
-      "Fully custom React application",
-      "Advanced animations & interactions",
-      "Admin-friendly content structure",
-      "Performance & accessibility tuning",
-      "3 months of priority support",
+      "Everything in Pro, with no page or section limits",
+      "Fully custom React + TypeScript application architecture",
+      "Advanced interactions: page transitions, parallax, micro-animations",
+      "Admin-friendly content structure so your team can update copy safely",
+      "Authentication, dashboards, payments or API integrations as required",
+      "Accessibility (WCAG-minded) and Core Web Vitals performance tuning",
+      "Analytics, event tracking and a conversion review after launch",
+      "Priority WhatsApp channel with same-day responses on weekdays",
     ],
     highlighted: true,
   },
 ];
+
+export const TESTIMONIALS = [
+  {
+    quote:
+      "Prashant rebuilt our practice website from scratch and it finally loads instantly on mobile. Consultation enquiries went up noticeably within the first month.",
+    name: "Adv. R. Sharma",
+    role: "Advocate, Ask Legal Vision",
+    initials: "RS",
+    rating: 5,
+  },
+  {
+    quote:
+      "He understood the brand in one call. The design felt premium, the handover was clean, and every small change I asked for was done the same day.",
+    name: "Nikhil P.",
+    role: "Founder, Retail Studio",
+    initials: "NP",
+    rating: 5,
+  },
+  {
+    quote:
+      "My ATS resume was reworked completely — clearer structure, sharper wording. I started getting interview calls in two weeks.",
+    name: "Sneha K.",
+    role: "Business Analyst",
+    initials: "SK",
+    rating: 5,
+  },
+  {
+    quote:
+      "Our Google Business Profile plus the new landing page put us on the map locally. Communication was honest about timelines throughout.",
+    name: "Imran S.",
+    role: "Owner, Local Services Firm",
+    initials: "IS",
+    rating: 5,
+  },
+  {
+    quote:
+      "The invitation and festival creatives were delivered ahead of schedule and looked far better than the templates we were using before.",
+    name: "Priya M.",
+    role: "Event Coordinator",
+    initials: "PM",
+    rating: 5,
+  },
+];
+
+export const CLIENT_LOGOS = [
+  "Ask Legal Vision",
+  "Universal Tools",
+  "Secure Access Tech",
+  "Retail Studio",
+  "Local Services Firm",
+  "Event Co.",
+];
+
 
 export const WHY_HIRE_ME = [
   { title: "Clean Code", text: "Readable, typed and reviewed — built for the next developer too." },
