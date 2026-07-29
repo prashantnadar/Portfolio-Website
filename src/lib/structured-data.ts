@@ -15,6 +15,15 @@ const aggregateRating = {
 
 const PROJECTS = [
   {
+    "@type": "WebSite",
+    "@id": "https://asklegalvision.in/#website",
+    name: "Ask Legal Vision",
+    url: "https://asklegalvision.in/",
+    description:
+      "Production legal-services website for Adv. Aditya Shankar Kharche, Bombay High Court — employment law, civil litigation and compliance — built with React, Tailwind CSS, PHP and MySQL.",
+    creator: { "@id": PERSON_ID },
+  },
+  {
     "@type": "SoftwareApplication",
     "@id": "/#universal-tools",
     name: "Universal Tools",
@@ -25,15 +34,6 @@ const PROJECTS = [
       "A modular multi-utility web platform bundling 100+ developer, text, image, PDF, color and productivity tools behind one fast, lazy-loaded interface.",
     author: { "@id": PERSON_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
-  },
-  {
-    "@type": "WebSite",
-    "@id": "https://asklegalvision.in/#website",
-    name: "Ask Legal Vision",
-    url: "https://asklegalvision.in/",
-    description:
-      "Production website for a Bombay High Court Advocate, covering services, consultation and testimonials with mobile-first performance tuning.",
-    creator: { "@id": PERSON_ID },
   },
   {
     "@type": "SoftwareApplication",
