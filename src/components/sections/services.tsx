@@ -1,11 +1,14 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
   Brush,
   CalendarHeart,
+  Clock,
   FileText,
   Globe,
   LayoutTemplate,
+  LifeBuoy,
   MapPinned,
   MessageSquare,
   Paintbrush,
@@ -16,11 +19,13 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import logo from "@/assets/pn-creation-logo.jpg.asset.json";
+import { BrandLogo } from "@/components/brand-logo";
 import { Reveal, StaggerGroup, fadeUp, scaleIn } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
+import { handleAnchorClick } from "@/lib/scroll-to";
 import { PRICING, SERVICES, SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
+
 
 const ICONS: LucideIcon[] = [
   Globe,
