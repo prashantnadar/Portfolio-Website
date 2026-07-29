@@ -236,7 +236,6 @@ export function Services() {
               key={faq.q}
               variants={fadeUp}
               open={i === 0}
-              name={undefined}
               className="group rounded-2xl border border-border bg-card p-5 shadow-soft transition-colors hover:border-primary/40"
             >
               <summary
