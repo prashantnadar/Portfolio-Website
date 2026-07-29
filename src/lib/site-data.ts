@@ -264,14 +264,7 @@ export const TESTIMONIALS = [
   },
 ];
 
-export const CLIENT_LOGOS = [
-  "Ask Legal Vision",
-  "Universal Tools",
-  "Secure Access Tech",
-  "Retail Studio",
-  "Local Services Firm",
-  "Event Co.",
-];
+export const CLIENT_LOGOS = ["Ask Legal Vision", "Universal Tools", "Power Consilium System"];
 
 
 export const WHY_HIRE_ME = [
