@@ -91,16 +91,7 @@ export function Contact() {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // 1) Honeypot / too-fast submit → silently reject as spam.
-    if (honeypot.trim() !== "" || Date.now() - mountedAt.current < 2500) {
-      await alert({
-        icon: "error",
-        title: "Submission blocked",
-        text: "This message looked automated and was blocked. If this was a mistake, please try again or reach me on WhatsApp.",
-        confirmButtonText: "Close",
-      });
-      return;
-    }
+    // Honeypot / too-fast checks now happen server-side so attempts get logged.
 
     // 2) Rate limit: cap sends per window and enforce a short cooldown.
     const history = recentSubmits();
