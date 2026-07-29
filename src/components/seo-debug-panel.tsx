@@ -110,31 +110,84 @@ export function SeoDebugPanel() {
   }, []);
 
   useEffect(() => {
-    if (open) setReport(validate());
+    if (!open) return;
+    setReport(validate());
+    // Load sitemap/robots once per open so the panel always shows live output.
+    (["/sitemap.xml", "/robots.txt"] as const).forEach((p) =>
+      loadAsset(p).then((r) => setAssets((prev) => ({ ...prev, [p]: r }))),
+    );
   }, [open]);
 
+  const copy = async (label: string, text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(label);
+    setTimeout(() => setCopied(""), 1500);
+  };
+
   if (!open || !report) return null;
-  const errors = report.issues.filter((i) => i.level === "error");
+
+  const asset = tab === "sitemap" ? assets["/sitemap.xml"] : tab === "robots" ? assets["/robots.txt"] : undefined;
+  const issues = tab === "schema" ? report.issues : (asset?.issues ?? []);
+  const errors = issues.filter((i) => i.level === "error");
+  const tabs: Tab[] = ["schema", "sitemap", "robots"];
 
   return (
-    <aside className="fixed right-4 bottom-4 z-[70] max-h-[60vh] w-80 overflow-auto rounded-2xl border border-border bg-card p-4 text-xs shadow-soft">
+    <aside className="fixed right-4 bottom-4 z-[70] flex max-h-[70vh] w-[22rem] flex-col overflow-hidden rounded-2xl border border-border bg-card p-4 text-xs shadow-soft">
       <div className="flex items-center justify-between gap-2">
-        <strong className="text-sm">SEO / JSON-LD debug</strong>
+        <strong className="text-sm">SEO debug</strong>
         <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
           close
         </button>
       </div>
-      <p className={errors.length ? "mt-2 font-semibold text-destructive" : "mt-2 font-semibold text-primary"}>
-        {errors.length ? `${errors.length} error(s)` : "Schema valid"} · {report.nodes.length} nodes
-      </p>
-      <p className="mt-2 text-muted-foreground">{Array.from(new Set(report.nodes)).join(", ")}</p>
-      <ul className="mt-3 space-y-1">
-        {report.issues.map((issue, i) => (
-          <li key={i} className={issue.level === "error" ? "text-destructive" : "text-muted-foreground"}>
-            • {issue.message}
-          </li>
+
+      <div className="mt-3 flex gap-1 rounded-lg bg-muted p-1">
+        {tabs.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`flex-1 rounded-md px-2 py-1 capitalize transition-colors ${
+              tab === t ? "bg-card font-semibold text-foreground shadow-sm" : "text-muted-foreground"
+            }`}
+          >
+            {t}
+          </button>
         ))}
-      </ul>
+      </div>
+
+      <p className={errors.length ? "mt-3 font-semibold text-destructive" : "mt-3 font-semibold text-primary"}>
+        {errors.length
+          ? `${errors.length} error(s)`
+          : tab === "schema"
+            ? "Schema valid"
+            : `${tab} OK`}
+        {tab === "schema" ? ` · ${report.nodes.length} nodes` : ""}
+      </p>
+
+      <div className="mt-2 flex-1 overflow-auto">
+        {tab === "schema" ? (
+          <p className="text-muted-foreground">{Array.from(new Set(report.nodes)).join(", ")}</p>
+        ) : (
+          <>
+            <button
+              onClick={() => copy(tab, asset?.text ?? "")}
+              className="mb-2 rounded-md border border-border px-2 py-1 hover:bg-muted"
+            >
+              {copied === tab ? "Copied!" : "Copy"}
+            </button>
+            <pre className="max-h-56 overflow-auto rounded-lg bg-muted p-2 whitespace-pre-wrap break-all text-[10px] leading-relaxed">
+              {asset?.text ?? "Loading…"}
+            </pre>
+          </>
+        )}
+        <ul className="mt-3 space-y-1">
+          {issues.map((issue, i) => (
+            <li key={i} className={issue.level === "error" ? "text-destructive" : "text-muted-foreground"}>
+              • {issue.message}
+            </li>
+          ))}
+        </ul>
+      </div>
     </aside>
   );
 }
+
