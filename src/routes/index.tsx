@@ -239,6 +239,9 @@ function Index() {
           <Playground />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
+          <UniversalToolsPromo />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
           <Experience />
         </Suspense>
         <Suspense fallback={<SectionFallback />}>
