@@ -28,22 +28,21 @@ const PROJECTS = [
   },
   {
     "@type": "WebSite",
+    "@id": "https://power-consilium.com/#website",
+    name: "Power Consilium System",
+    url: "https://power-consilium.com",
+    description:
+      "Corporate website for Power Consilium System (PCS), a Mumbai-based UPS and power infrastructure company offering pan-India UPS AMC, card-level repairing, battery supply and energy audits.",
+    creator: { "@id": PERSON_ID },
+  },
+  {
+    "@type": "WebSite",
     "@id": "https://asklegalvision.in/#website",
     name: "Ask Legal Vision",
     url: "https://asklegalvision.in/",
     description:
       "Production legal-services website for Adv. Aditya Shankar Kharche, Bombay High Court — employment law, civil litigation and compliance — built with React, Tailwind CSS, PHP and MySQL.",
     creator: { "@id": PERSON_ID },
-  },
-  {
-    "@type": "SoftwareApplication",
-    "@id": "/#task-manager",
-    name: "Task Manager",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    description:
-      "A full CRUD task management application built with React, Context API state and client-side routing.",
-    author: { "@id": PERSON_ID },
   },
 ];
 
