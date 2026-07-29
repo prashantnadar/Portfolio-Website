@@ -6,6 +6,11 @@ import { useEffect, useState } from "react";
  * Toggle with Ctrl/Cmd + Shift + S, or ?seo=1.
  */
 
+/** Value objects that legitimately carry no name/@id. */
+const VALUE_TYPES = new Set([
+  "PostalAddress","PriceSpecification","AggregateRating","Rating","ListItem","Offer","Answer",
+]);
+
 interface Issue {
   level: "error" | "warn";
   message: string;
@@ -28,7 +33,7 @@ function validate(): { nodes: string[]; issues: Issue[]; ids: string[] } {
     if (Object.keys(obj).length === 1 && typeof obj["@id"] === "string") refs.push(obj["@id"]);
     if (typeof obj["@type"] === "string") {
       nodes.push(obj["@type"]);
-      if (!obj.name && !obj["@id"] && !obj.text && !obj.reviewBody)
+      if (!VALUE_TYPES.has(obj["@type"]) && !obj.name && !obj["@id"] && !obj.text && !obj.reviewBody)
         issues.push({ level: "warn", message: `${obj["@type"]} node has no name/@id` });
     }
     Object.values(obj).forEach(walk);
