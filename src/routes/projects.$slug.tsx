@@ -82,20 +82,29 @@ function CaseStudyPage() {
   return (
     <div className="min-h-dvh overflow-x-hidden">
       <Navbar hideSectionLinks />
-      <main id="main" className="pt-20 pb-20 sm:pt-24">
+      <main id="main" className="pt-16 pb-16 sm:pt-20 sm:pb-20">
         <article className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
           <Reveal variants={fadeUp}>
-            {/* Breadcrumb replaces the old standalone "Case study" badge */}
+            {/* Breadcrumb shows only Home / Projects / <title> — no "Case study" label */}
             <nav aria-label="Breadcrumb">
               <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                 <li>
                   <Link
                     to="/"
+                    title="Back to home"
+                    className="font-medium transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true">/</li>
+                <li>
+                  <Link
+                    to="/"
                     hash="projects"
                     title="Back to all projects"
-                    className="inline-flex items-center gap-1.5 font-medium transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                    className="font-medium transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                   >
-                    <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                     Projects
                   </Link>
                 </li>
@@ -105,13 +114,27 @@ function CaseStudyPage() {
                 </li>
               </ol>
             </nav>
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+
+            {/* Persistent "Back to Projects" action for faster navigation */}
+            <Link
+              to="/"
+              hash="projects"
+              title="Back to Projects"
+              aria-label="Back to Projects"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-semibold transition-colors hover:border-primary/45 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back to Projects
+            </Link>
+
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-balance sm:text-4xl">
               {project.title}
             </h1>
 
             <p className="mt-3 text-base leading-relaxed text-muted-foreground text-pretty">
               {cs.summary}
             </p>
+
 
             <dl className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
               {[
