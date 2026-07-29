@@ -104,67 +104,117 @@ export function Services() {
         })}
       </StaggerGroup>
 
-      <Reveal className="mt-20 text-center">
-        <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">Simple, transparent pricing</h3>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
-          Every package is quoted after a short conversation — these ranges cover most projects.
-        </p>
-      </Reveal>
+      <div id="pricing" className="scroll-mt-24">
+        <Reveal className="mt-20 text-center">
+          <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-semibold tracking-[0.16em] text-primary uppercase">
+            Pricing
+          </span>
+          <h3 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
+            Simple, transparent packages
+          </h3>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground sm:text-base">
+            No hidden line items and no surprise invoices. Every package is confirmed after a short
+            conversation — these ranges cover most projects, and anything custom is quoted upfront.
+          </p>
+        </Reveal>
 
-      <StaggerGroup className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3" gap={0.1}>
-        {PRICING.map((plan) => (
-          <motion.article
-            key={plan.tier}
-            variants={fadeUp}
-            whileHover={{ y: -8 }}
-            transition={{ type: "spring", stiffness: 240, damping: 22 }}
-            className={cn(
-              "relative flex h-full flex-col rounded-3xl border p-7 shadow-soft",
-              plan.highlighted
-                ? "border-primary/50 bg-card ring-2 ring-primary/30 lg:-translate-y-3"
-                : "border-border bg-card",
-            )}
-          >
-            {plan.highlighted ? (
-              <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-primary-foreground shadow-glow">
-                <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
-                Most complete
-              </span>
-            ) : null}
-            <h4 className="text-lg font-semibold">{plan.tier}</h4>
-            <p className="mt-1 text-sm text-muted-foreground">{plan.tagline}</p>
-            <p
+        <StaggerGroup className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3" gap={0.1}>
+          {PRICING.map((plan) => (
+            <motion.article
+              key={plan.tier}
+              variants={fadeUp}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 240, damping: 22 }}
               className={cn(
-                "mt-5 font-display text-2xl font-bold sm:text-3xl",
-                plan.highlighted && "text-gradient",
-              )}
-            >
-              {plan.price}
-            </p>
-            <ul className="mt-6 flex-1 space-y-3">
-              {plan.features.map((feature) => (
-                <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
-                  <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            <motion.a
-              href="#contact"
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.96 }}
-              className={cn(
-                "mt-8 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                "relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 shadow-soft",
                 plan.highlighted
-                  ? "bg-primary text-primary-foreground shadow-glow"
-                  : "border border-border bg-surface text-foreground hover:bg-accent",
+                  ? "border-primary/50 bg-card ring-2 ring-primary/30 lg:-translate-y-3"
+                  : "border-border bg-card",
               )}
             >
-              Start with {plan.tier}
-            </motion.a>
-          </motion.article>
-        ))}
-      </StaggerGroup>
+              {plan.highlighted ? (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -top-24 -right-20 h-52 w-52 rounded-full bg-primary/15 blur-3xl"
+                  />
+                  <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-primary-foreground shadow-glow">
+                    <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                    Most complete
+                  </span>
+                </>
+              ) : null}
+
+              <h4 className="mt-2 text-lg font-semibold">{plan.tier}</h4>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{plan.tagline}</p>
+
+              <p
+                className={cn(
+                  "mt-5 font-display text-2xl font-bold sm:text-3xl",
+                  plan.highlighted && "text-gradient",
+                )}
+              >
+                {plan.price}
+              </p>
+              <p className="mt-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                {plan.period}
+              </p>
+
+              <p className="mt-5 rounded-xl bg-surface px-3.5 py-2.5 text-xs leading-relaxed font-medium text-muted-foreground">
+                {plan.bestFor}
+              </p>
+
+              <ul className="mt-4 grid grid-cols-1 gap-2 text-xs text-muted-foreground sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                <li className="inline-flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
+                  {plan.timeline}
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <RefreshCw className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
+                  {plan.revisions}
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <LifeBuoy className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
+                  {plan.support}
+                </li>
+              </ul>
+
+              <ul className="mt-6 flex-1 space-y-3 border-t border-border pt-6">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
+                    <BadgeCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <motion.a
+                href="#contact"
+                onClick={(e) => handleAnchorClick(e, "#contact")}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className={cn(
+                  "mt-8 inline-flex min-h-11 items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                  plan.highlighted
+                    ? "bg-primary text-primary-foreground shadow-glow"
+                    : "border border-border bg-surface text-foreground hover:bg-accent",
+                )}
+              >
+                Start with {plan.tier}
+              </motion.a>
+            </motion.article>
+          ))}
+        </StaggerGroup>
+
+        <Reveal className="mt-8 text-center text-xs text-muted-foreground">
+          Prices are indicative and exclude domain, hosting and paid third-party services. Read the{" "}
+          <Link to="/terms" className="font-medium text-primary underline underline-offset-4">
+            Terms &amp; Conditions
+          </Link>
+          .
+        </Reveal>
+      </div>
+
     </Section>
   );
 }
