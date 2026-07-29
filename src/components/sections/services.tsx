@@ -23,7 +23,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { Reveal, StaggerGroup, fadeUp, scaleIn } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 import { handleAnchorClick } from "@/lib/scroll-to";
-import { PRICING, SERVICES, SITE } from "@/lib/site-data";
+import { FAQS, PRICING, SERVICES, SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
 
@@ -217,6 +217,31 @@ export function Services() {
           .
         </Reveal>
       </div>
+
+      {/* Visible FAQ — mirrors the FAQPage JSON-LD emitted on this route. */}
+      <div className="mx-auto mt-16 max-w-3xl">
+        <Reveal className="text-center">
+          <h3 className="text-xl font-bold sm:text-2xl">Frequently asked questions</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Scope, timelines and how working with PN Creation actually goes.
+          </p>
+        </Reveal>
+        <StaggerGroup className="mt-6 space-y-3" gap={0.05}>
+          {FAQS.map((faq) => (
+            <motion.details
+              key={faq.q}
+              variants={fadeUp}
+              className="group rounded-2xl border border-border bg-card p-5 shadow-soft"
+            >
+              <summary className="cursor-pointer list-none text-sm font-semibold marker:hidden">
+                {faq.q}
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
+            </motion.details>
+          ))}
+        </StaggerGroup>
+      </div>
+
 
     </Section>
   );

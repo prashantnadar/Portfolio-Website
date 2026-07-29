@@ -284,3 +284,31 @@ export const WHY_HIRE_ME = [
   { title: "Attention to Detail", text: "Focus states, empty states and edge cases — not just the happy path." },
   { title: "Reliable Communication", text: "Clear updates, realistic timelines and no disappearing acts." },
 ];
+
+/** Shared FAQ content — rendered in the Services section and emitted as FAQPage JSON-LD. */
+export const FAQS = [
+  {
+    q: "What does a PN Creation website project include?",
+    a: "Design, responsive frontend development, basic on-page SEO, contact form wiring, and a walkthrough at handover. Domain, hosting and paid third-party services are billed separately.",
+  },
+  {
+    q: "How long does a typical website take?",
+    a: "A landing page usually ships in 3–5 days, a multi-page business site in 1–2 weeks, depending on how quickly content and feedback come through.",
+  },
+  {
+    q: "Which technologies do you build with?",
+    a: "React, TypeScript, Tailwind CSS and Framer Motion for interfaces, with a focus on Core Web Vitals, accessibility and clean, maintainable components.",
+  },
+  {
+    q: "Can you redesign or fix an existing website?",
+    a: "Yes. Redesigns, performance clean-ups and bug fixes on existing React or WordPress-style sites are a regular part of the work.",
+  },
+  {
+    q: "Are the projects in your portfolio live?",
+    a: "Ask Legal Vision and Universal Tools (universaltools.in) are live products; Task Manager is a React CRUD application showcasing state management and routing.",
+  },
+  {
+    q: "Do you offer support after launch?",
+    a: "Every package includes a post-launch support window for fixes and small content changes, with optional ongoing maintenance after that.",
+  },
+];
