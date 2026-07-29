@@ -34,6 +34,41 @@ interface Project {
 
 const PROJECTS: Project[] = [
   {
+    title: "Universal Tools",
+    subtitle: "universaltools.in — 110+ browser-based utilities in one platform",
+    overview:
+      "My own live product: a fast, ad-light multi-utility platform bundling 110+ text, PDF, image, code, color, password and productivity tools behind a single modular interface. Accounts, search and usage data are backed by PostgreSQL, while the heavy processing runs client-side so nothing leaves the user's device.",
+    image: toolsImg,
+    avif: toolsAvif,
+    webp: toolsWebp,
+    alt: "Universal Tools homepage with the one toolkit hero, tool category navigation and search bar",
+    stack: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "PostgreSQL",
+      "Node.js API",
+      "Lazy Loading",
+      "Modular Architecture",
+      "SEO",
+      "Responsive UI",
+    ],
+    features: [
+      "110+ tools across text, PDF, image, code, color, password and productivity categories",
+      "Global Ctrl/⌘K command search across every tool with instant filtering",
+      "PostgreSQL-backed accounts, auth (log in / sign up) and usage persistence",
+      "Privacy-first: file and text processing runs in the browser — no uploads",
+      "Lazy-loaded modular routing keeps the initial bundle lean and first paint fast",
+      "Built-in dark mode with remembered preference",
+      "Fully responsive across mobile, tablet, laptop and large monitors",
+      "SEO-optimised tool pages with semantic markup and per-tool metadata",
+    ],
+    live: "https://universaltools.in",
+    github: SITE.github,
+    featured: true,
+    note: "Live in production, actively maintained — new tools ship regularly.",
+  },
+  {
     title: "Ask Legal Vision",
     subtitle: "Live website for Adv. Aditya Shankar Kharche — Bombay High Court",
     overview:
@@ -52,27 +87,7 @@ const PROJECTS: Project[] = [
       "Fully responsive across mobile, tablet and desktop with fast first paint",
     ],
     live: "https://asklegalvision.in/",
-    featured: true,
     note: "Live in production and actively used by the practice for client enquiries.",
-  },
-  {
-    title: "Universal Tools",
-    subtitle: "Multi-utility platform",
-    overview:
-      "A growing multi-utility platform bundling developer, SEO, productivity and design tools behind one fast, modular interface. Routes are lazy loaded and each tool is an isolated, reusable module.",
-    image: toolsImg,
-    avif: toolsAvif,
-    webp: toolsWebp,
-    alt: "Universal Tools dashboard showing categorised developer, SEO and design tool cards",
-    stack: ["React", "TypeScript", "Tailwind CSS", "Lazy Loading", "Modular Architecture"],
-    features: [
-      "Developer tools, SEO tools, productivity tools and design tools",
-      "Lazy-loaded modular routing for a lean initial bundle",
-      "Scalable reusable architecture built for continuous expansion",
-    ],
-    live: "https://universaltools.in",
-    github: SITE.github,
-    note: "100+ tools planned. New tools are continuously being added.",
   },
   {
     title: "Task Manager",
