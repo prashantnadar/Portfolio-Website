@@ -13,7 +13,6 @@ import toolsWebp from "@/assets/project-tools.png?w=640;960;1440&format=webp&as=
 import { StaggerGroup, fadeUp } from "@/components/motion/reveal";
 import { ResponsiveImage } from "@/components/responsive-image";
 import { Section } from "@/components/section";
-import { SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
 interface Project {
