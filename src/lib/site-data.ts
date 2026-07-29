@@ -60,13 +60,16 @@ export const SKILL_GROUPS: {
   },
   {
     category: "Other",
-    description: "Engineering practices that make products production-ready.",
+    description: "Engineering practices and everyday tools that make products production-ready.",
     items: [
       "API Integration",
       "Component Architecture",
       "Performance Optimization",
       "Accessibility",
       "SEO Friendly Development",
+      "Canva",
+      "MS Excel",
+      "MS Word",
     ],
   },
 ];
