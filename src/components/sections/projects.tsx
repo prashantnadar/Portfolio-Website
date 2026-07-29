@@ -133,22 +133,32 @@ export function Projects() {
               project.featured && "lg:col-span-2",
             )}
           >
-            <div className="relative overflow-hidden">
-              <div className={cn("aspect-video w-full", project.featured && "lg:aspect-[21/9]")}>
-                <ResponsiveImage
-                  src={project.image}
-                  avif={project.avif}
-                  webp={project.webp}
-                  alt={project.alt}
-                  width={1200}
-                  height={800}
-                  sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
-                  className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-
+            {/* Screenshot presented inside a browser-style frame so it reads as a preview, not decoration */}
+            <div className="relative border-b border-border bg-surface p-3 sm:p-4">
+              <div className="overflow-hidden rounded-xl border border-border bg-background shadow-soft">
+                <div className="flex items-center gap-2 border-b border-border bg-surface px-3 py-2">
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span className="ml-2 truncate text-[11px] font-medium text-muted-foreground">
+                    {project.live ? project.live.replace(/^https?:\/\//, "").replace(/\/$/, "") : "local preview"}
+                  </span>
+                </div>
+                <div className={cn("aspect-video w-full overflow-hidden", project.featured && "lg:aspect-[21/9]")}>
+                  <ResponsiveImage
+                    src={project.image}
+                    avif={project.avif}
+                    webp={project.webp}
+                    alt={project.alt}
+                    width={1200}
+                    height={800}
+                    sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
+                    className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
               </div>
               {project.featured ? (
-                <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
+                <span className="absolute top-6 left-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow sm:top-7 sm:left-7">
                   <Star className="h-3.5 w-3.5" aria-hidden="true" />
                   Featured project
                 </span>
@@ -160,17 +170,23 @@ export function Projects() {
               <p className="mt-1 text-sm font-medium text-primary">{project.subtitle}</p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{project.overview}</p>
 
-              <ul className="mt-5 space-y-2">
-                {project.features.map((feature) => (
-                  <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
-                    <span
-                      aria-hidden="true"
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
-                    />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Labelled blocks keep highlights and stack visually distinct from the preview */}
+              <div className="mt-6 rounded-2xl border border-border bg-surface/60 p-4 sm:p-5">
+                <h4 className="text-xs font-semibold tracking-[0.14em] text-foreground uppercase">
+                  Key highlights
+                </h4>
+                <ul className="mt-3 space-y-2">
+                  {project.features.map((feature) => (
+                    <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
+                      />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               {project.note ? (
                 <p className="mt-5 rounded-xl border border-primary/25 bg-primary/10 px-4 py-3 text-sm font-medium text-primary">
@@ -178,16 +194,22 @@ export function Projects() {
                 </p>
               ) : null}
 
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {project.stack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-6 border-t border-border pt-5">
+                <h4 className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+                  Tech stack
+                </h4>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {project.stack.map((tech) => (
+                    <li
+                      key={tech}
+                      className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                    >
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
 
               <div className="mt-7 flex flex-wrap gap-3 pt-1">
                 {project.live ? (
