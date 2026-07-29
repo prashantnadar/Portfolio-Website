@@ -1,14 +1,18 @@
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Mail, Phone } from "lucide-react";
 import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
+import { BrandLogo } from "@/components/brand-logo";
+import { handleAnchorClick } from "@/lib/scroll-to";
 import { SITE } from "@/lib/site-data";
 
 const QUICK_LINKS = [
   { label: "Projects", href: "#projects" },
+  { label: "Playground", href: "#playground" },
   { label: "Services", href: "#services" },
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Why Me", href: "#why-hire-me" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -23,15 +27,17 @@ export function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-          <a href="#home" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary font-display text-sm font-bold text-primary-foreground">
-              PN
-            </span>
+          <a
+            href="#home"
+            onClick={(e) => handleAnchorClick(e, "#home")}
+            className="flex items-center gap-2.5"
+          >
+            <BrandLogo size={44} className="shadow-soft" />
             <span className="font-display text-base font-semibold">Prashant Nadar</span>
           </a>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Frontend Developer building fast, accessible React interfaces — and websites for
-            businesses that need a real online presence.
+            businesses that need a real online presence, under the PN Creation brand.
           </p>
         </div>
 
@@ -42,6 +48,7 @@ export function Footer() {
               <li key={link.href}>
                 <a
                   href={link.href}
+                  onClick={(e) => handleAnchorClick(e, link.href)}
                   className="text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 >
                   {link.label}
@@ -67,6 +74,26 @@ export function Footer() {
                 </a>
               </li>
             ))}
+          </ul>
+
+          <h2 className="mt-7 text-sm font-semibold tracking-wide uppercase">Legal</h2>
+          <ul className="mt-4 space-y-2.5">
+            <li>
+              <Link
+                to="/privacy"
+                className="text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              >
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/terms"
+                className="text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              >
+                Terms &amp; Conditions
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -103,8 +130,10 @@ export function Footer() {
           className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-center text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:text-left lg:px-8"
         >
           <p>© {new Date().getFullYear()} Prashant Nadar. All rights reserved.</p>
-          <p>
-            Freelance Services powered by <span className="font-semibold text-primary">PN Creation</span>.
+          <p className="inline-flex items-center justify-center gap-2 sm:justify-end">
+            <BrandLogo size={22} className="rounded-md" />
+            Freelance Services powered by{" "}
+            <span className="font-semibold text-primary">PN Creation</span>.
           </p>
         </motion.div>
       </div>
