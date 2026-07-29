@@ -23,8 +23,6 @@ export function CursorEffect() {
   const glowX = useSpring(x, { stiffness: 55, damping: 18, mass: 1.1 });
   const glowY = useSpring(y, { stiffness: 55, damping: 18, mass: 1.1 });
 
-  // Glow stretches slightly in the direction of travel.
-  const velX = useTransform(glowX, (v) => v);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
