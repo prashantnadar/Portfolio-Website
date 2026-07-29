@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Sparkles } from "lucide-react";
-import { SiGithub, SiLinkedin, SiInstagram } from "react-icons/si";
+import { FaGithub, FaLinkedinIn, FaInstagram } from "react-icons/fa6";
 
 import { Reveal, StaggerGroup, fadeUp, scaleIn } from "@/components/motion/reveal";
 import { SITE } from "@/lib/site-data";
@@ -8,9 +8,9 @@ import { SITE } from "@/lib/site-data";
 const ROLES = ["Frontend Developer", "React Developer", "Freelance Web Developer"];
 
 const SOCIALS = [
-  { href: SITE.github, label: "GitHub", Icon: SiGithub },
-  { href: SITE.linkedin, label: "LinkedIn", Icon: SiLinkedin },
-  { href: SITE.instagram, label: "Instagram", Icon: SiInstagram },
+  { href: SITE.github, label: "GitHub", Icon: FaGithub },
+  { href: SITE.linkedin, label: "LinkedIn", Icon: FaLinkedinIn },
+  { href: SITE.instagram, label: "Instagram", Icon: FaInstagram },
 ];
 
 const STATS = [
