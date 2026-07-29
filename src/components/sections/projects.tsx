@@ -4,9 +4,9 @@ import { ArrowUpRight, Github, Star } from "lucide-react";
 import legalAvif from "@/assets/project-legal.png?w=640;960;1440&format=avif&as=srcset";
 import legalImg from "@/assets/project-legal.png?w=1024&format=jpg";
 import legalWebp from "@/assets/project-legal.png?w=640;960;1440&format=webp&as=srcset";
-import tasksAvif from "@/assets/project-tasks.jpg?w=640;960;1440&format=avif&as=srcset";
-import tasksImg from "@/assets/project-tasks.jpg?w=1024&format=jpg";
-import tasksWebp from "@/assets/project-tasks.jpg?w=640;960;1440&format=webp&as=srcset";
+import pcsAvif from "@/assets/project-pcs.png?w=640;960;1440&format=avif&as=srcset";
+import pcsImg from "@/assets/project-pcs.png?w=1024&format=jpg";
+import pcsWebp from "@/assets/project-pcs.png?w=640;960;1440&format=webp&as=srcset";
 import toolsAvif from "@/assets/project-tools.png?w=640;960;1440&format=avif&as=srcset";
 import toolsImg from "@/assets/project-tools.png?w=1024&format=jpg";
 import toolsWebp from "@/assets/project-tools.png?w=640;960;1440&format=webp&as=srcset";
@@ -69,6 +69,28 @@ const PROJECTS: Project[] = [
     note: "Live in production, actively maintained — new tools ship regularly.",
   },
   {
+    title: "Power Consilium System",
+    subtitle: "power-consilium.com — Pan India UPS AMC & power infrastructure",
+    overview:
+      "A corporate website for Power Consilium System (PCS), a Mumbai-based UPS and power infrastructure company established in 2013. Founded by senior executives with card-level expertise across APC-MGE, Emerson and Numeric, the site presents pan-India AMC services, products and enquiry channels through a bold hero slider and conversion-focused layout.",
+    image: pcsImg,
+    avif: pcsAvif,
+    webp: pcsWebp,
+    alt: "Power Consilium System website hero showing Pan India UPS AMC and services",
+    stack: ["React", "Tailwind CSS", "Responsive UI", "Dark Mode", "SEO", "WhatsApp Integration"],
+    features: [
+      "Animated hero slider highlighting 1000+ UPS units managed across 70+ locations",
+      "Pan India UPS AMC services and card-level UPS repairing",
+      "Inverter sales & service plus tubular and SMF battery supply",
+      "Energy & power audit and wholesale UPS / battery supply",
+      "Multivendor support for APC, Emerson and Numeric equipment",
+      "24/7 remote monitoring & support with floating WhatsApp and call CTAs",
+      "Fully responsive with built-in dark mode",
+    ],
+    live: "https://power-consilium.com",
+    note: "Live corporate site — serving corporate and IT clients pan India since 2013.",
+  },
+  {
     title: "Ask Legal Vision",
     subtitle: "Live website for Adv. Aditya Shankar Kharche — Bombay High Court",
     overview:
@@ -89,19 +111,6 @@ const PROJECTS: Project[] = [
     live: "https://asklegalvision.in/",
     note: "Live in production and actively used by the practice for client enquiries.",
   },
-  {
-    title: "Task Manager",
-    subtitle: "CRUD task application",
-    overview:
-      "A focused task manager covering the full CRUD cycle with Context API state, client-side routing and a responsive Tailwind interface.",
-    image: tasksImg,
-    avif: tasksAvif,
-    webp: tasksWebp,
-    alt: "Task manager application interface with task columns and an add task form",
-    stack: ["React", "Context API", "Routing", "Tailwind CSS"],
-    features: ["Create, read, update and delete tasks", "Global state with Context API", "Responsive, keyboard-friendly UI"],
-    github: SITE.github,
-  },
 ];
 
 export function Projects() {
@@ -110,7 +119,7 @@ export function Projects() {
       id="projects"
       eyebrow="Projects"
       title="Selected work"
-      description="Real products — one live in production, one continuously expanding, one built to sharpen fundamentals."
+      description="Real products in production — a live multi-utility platform, a pan-India power services site and a legal practice website."
     >
       <StaggerGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2" gap={0.1}>
         {PROJECTS.map((project) => (
@@ -124,22 +133,32 @@ export function Projects() {
               project.featured && "lg:col-span-2",
             )}
           >
-            <div className="relative overflow-hidden">
-              <div className={cn("aspect-video w-full", project.featured && "lg:aspect-[21/9]")}>
-                <ResponsiveImage
-                  src={project.image}
-                  avif={project.avif}
-                  webp={project.webp}
-                  alt={project.alt}
-                  width={1200}
-                  height={800}
-                  sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
-                  className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-
+            {/* Screenshot presented inside a browser-style frame so it reads as a preview, not decoration */}
+            <div className="relative border-b border-border bg-surface p-3 sm:p-4">
+              <div className="overflow-hidden rounded-xl border border-border bg-background shadow-soft">
+                <div className="flex items-center gap-2 border-b border-border bg-surface px-3 py-2">
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-muted-foreground/30" />
+                  <span className="ml-2 truncate text-[11px] font-medium text-muted-foreground">
+                    {project.live ? project.live.replace(/^https?:\/\//, "").replace(/\/$/, "") : "local preview"}
+                  </span>
+                </div>
+                <div className={cn("aspect-video w-full overflow-hidden", project.featured && "lg:aspect-[21/9]")}>
+                  <ResponsiveImage
+                    src={project.image}
+                    avif={project.avif}
+                    webp={project.webp}
+                    alt={project.alt}
+                    width={1200}
+                    height={800}
+                    sizes={project.featured ? "(min-width: 1024px) 1100px, 100vw" : "(min-width: 1024px) 560px, 100vw"}
+                    className="size-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
               </div>
               {project.featured ? (
-                <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
+                <span className="absolute top-6 left-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow sm:top-7 sm:left-7">
                   <Star className="h-3.5 w-3.5" aria-hidden="true" />
                   Featured project
                 </span>
@@ -151,17 +170,23 @@ export function Projects() {
               <p className="mt-1 text-sm font-medium text-primary">{project.subtitle}</p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{project.overview}</p>
 
-              <ul className="mt-5 space-y-2">
-                {project.features.map((feature) => (
-                  <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
-                    <span
-                      aria-hidden="true"
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
-                    />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Labelled blocks keep highlights and stack visually distinct from the preview */}
+              <div className="mt-6 rounded-2xl border border-border bg-surface/60 p-4 sm:p-5">
+                <h4 className="text-xs font-semibold tracking-[0.14em] text-foreground uppercase">
+                  Key highlights
+                </h4>
+                <ul className="mt-3 space-y-2">
+                  {project.features.map((feature) => (
+                    <li key={feature} className="flex gap-2.5 text-sm text-muted-foreground">
+                      <span
+                        aria-hidden="true"
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
+                      />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               {project.note ? (
                 <p className="mt-5 rounded-xl border border-primary/25 bg-primary/10 px-4 py-3 text-sm font-medium text-primary">
@@ -169,16 +194,22 @@ export function Projects() {
                 </p>
               ) : null}
 
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {project.stack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground"
-                  >
-                    {tech}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-6 border-t border-border pt-5">
+                <h4 className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+                  Tech stack
+                </h4>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {project.stack.map((tech) => (
+                    <li
+                      key={tech}
+                      className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground"
+                    >
+                      {tech}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
 
               <div className="mt-7 flex flex-wrap gap-3 pt-1">
                 {project.live ? (
