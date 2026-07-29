@@ -119,7 +119,7 @@ export function Projects() {
       id="projects"
       eyebrow="Projects"
       title="Selected work"
-      description="Real products — one live in production, one continuously expanding, one built to sharpen fundamentals."
+      description="Real products in production — a live multi-utility platform, a pan-India power services site and a legal practice website."
     >
       <StaggerGroup className="grid grid-cols-1 gap-7 lg:grid-cols-2" gap={0.1}>
         {PROJECTS.map((project) => (
