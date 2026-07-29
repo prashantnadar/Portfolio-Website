@@ -182,7 +182,7 @@ function MemoryGame() {
                     ? "border-primary/50 bg-primary/15 text-primary"
                     : revealed
                       ? "border-primary/30 bg-surface text-foreground"
-                      : "border-border bg-surface text-transparent hover:border-primary/40",
+                      : "border-border bg-surface text-lg text-primary/35 hover:border-primary/40",
                 )}
               >
                 <span style={{ transform: revealed ? "rotateY(180deg)" : undefined }}>
