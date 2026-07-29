@@ -1,6 +1,8 @@
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { ElementType, ReactNode } from "react";
+import { memo } from "react";
 
+import { useRemountAudit } from "@/lib/render-audit";
 import { cn } from "@/lib/utils";
 
 export const fadeUp: Variants = {
@@ -33,6 +35,12 @@ export const stagger = (staggerChildren = 0.09, delayChildren = 0): Variants => 
   show: { transition: { staggerChildren, delayChildren } },
 });
 
+/** Reduced-motion variant set: no transform, just an instant/soft opacity swap. */
+const softVariants: Variants = {
+  hidden: { opacity: 1 },
+  show: { opacity: 1 },
+};
+
 interface RevealProps {
   children: ReactNode;
   className?: string;
@@ -56,8 +64,14 @@ function getMotionTag(as: ElementType): ElementType {
   return created;
 }
 
-/** Scroll-triggered reveal wrapper used across every section. */
-export function Reveal({
+/**
+ * Scroll-triggered reveal wrapper used across every section.
+ *
+ * Trigger tuning: `once` is true and the viewport margin starts the animation a
+ * little before the element is fully in view, so an element can never enter and
+ * exit repeatedly while the user scrolls up and down.
+ */
+function RevealBase({
   children,
   className,
   variants = fadeUp,
@@ -65,23 +79,32 @@ export function Reveal({
   as = "div",
   once = true,
 }: RevealProps) {
+  const reduce = useReducedMotion();
   const MotionTag = getMotionTag(as);
+
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useRemountAudit("Reveal", { as });
+  }
+
   return (
     <MotionTag
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once, amount: 0.2 }}
-      transition={{ delay }}
-      variants={variants}
+      viewport={{ once, amount: 0.15, margin: "0px 0px -10% 0px" }}
+      transition={reduce ? { duration: 0 } : { delay }}
+      variants={reduce ? softVariants : variants}
     >
       {children}
     </MotionTag>
   );
 }
 
+export const Reveal = memo(RevealBase);
+
 /** Staggered container — children should use `variants={fadeUp}` etc. */
-export function StaggerGroup({
+function StaggerGroupBase({
   children,
   className,
   gap = 0.08,
@@ -92,15 +115,19 @@ export function StaggerGroup({
   gap?: number;
   delay?: number;
 }) {
+  const reduce = useReducedMotion();
+
   return (
     <motion.div
       className={cn(className)}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.15 }}
-      variants={stagger(gap, delay)}
+      viewport={{ once: true, amount: 0.12, margin: "0px 0px -10% 0px" }}
+      variants={reduce ? softVariants : stagger(gap, delay)}
     >
       {children}
     </motion.div>
   );
 }
+
+export const StaggerGroup = memo(StaggerGroupBase);
