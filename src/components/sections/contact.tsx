@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { FaGithub, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 import { z } from "zod";
 
@@ -36,15 +36,37 @@ const SOCIALS = [
 const fieldClass =
   "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none";
 
+// Client-side spam guards: max 3 sends per rolling window, 30s between sends.
+const RATE_LIMIT = { max: 3, windowMs: 10 * 60_000, cooldownMs: 30_000 };
+const RATE_KEY = "contact-submits";
+
+/** Reads recent submit timestamps from localStorage, dropping expired ones. */
+const recentSubmits = (): number[] => {
+  try {
+    const raw = JSON.parse(localStorage.getItem(RATE_KEY) ?? "[]");
+    const now = Date.now();
+    return Array.isArray(raw)
+      ? raw.filter((t: unknown) => typeof t === "number" && now - t < RATE_LIMIT.windowMs)
+      : [];
+  } catch {
+    return [];
+  }
+};
+
 export function Contact() {
   const [values, setValues] = useState<ContactValues>(EMPTY);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  // Honeypot: real users never see or fill this field.
+  const [honeypot, setHoneypot] = useState("");
+  // Bots submit almost instantly — track when the form was first rendered.
+  const mountedAt = useRef(Date.now());
 
   const update = (key: keyof ContactValues, value: string) => {
     setValues((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
+
 
   /** SweetAlert2 themed to match the current light/dark palette. */
   const alert = async (opts: {
@@ -65,7 +87,43 @@ export function Contact() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // 1) Honeypot / too-fast submit → silently reject as spam.
+    if (honeypot.trim() !== "" || Date.now() - mountedAt.current < 2500) {
+      await alert({
+        icon: "error",
+        title: "Submission blocked",
+        text: "This message looked automated and was blocked. If this was a mistake, please try again or reach me on WhatsApp.",
+        confirmButtonText: "Close",
+      });
+      return;
+    }
+
+    // 2) Rate limit: cap sends per window and enforce a short cooldown.
+    const history = recentSubmits();
+    const last = history[history.length - 1];
+    if (last && Date.now() - last < RATE_LIMIT.cooldownMs) {
+      const wait = Math.ceil((RATE_LIMIT.cooldownMs - (Date.now() - last)) / 1000);
+      await alert({
+        icon: "error",
+        title: "Slow down a moment",
+        text: `Please wait ${wait} second${wait === 1 ? "" : "s"} before sending another message.`,
+        confirmButtonText: "Okay",
+      });
+      return;
+    }
+    if (history.length >= RATE_LIMIT.max) {
+      await alert({
+        icon: "error",
+        title: "Too many messages",
+        text: "You've reached the limit of 3 messages. Please email or WhatsApp me directly and I'll reply there.",
+        confirmButtonText: "Close",
+      });
+      return;
+    }
+
     const parsed = contactSchema.safeParse(values);
+
     if (!parsed.success) {
       const next: FieldErrors = {};
       for (const issue of parsed.error.issues) {
@@ -91,6 +149,12 @@ export function Contact() {
           900,
         ),
       );
+      // Record the successful send for the rate limiter.
+      try {
+        localStorage.setItem(RATE_KEY, JSON.stringify([...history, Date.now()]));
+      } catch {
+        /* storage unavailable — skip rate tracking */
+      }
       await alert({
         icon: "success",
         title: "Message sent",
@@ -98,6 +162,7 @@ export function Contact() {
         confirmButtonText: "Great",
       });
       setValues(EMPTY);
+
     } catch {
       await alert({
         icon: "error",
@@ -197,6 +262,19 @@ export function Contact() {
             aria-busy={submitting}
             className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
           >
+            {/* Honeypot — hidden from users and assistive tech, bots fill it. */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label htmlFor="company-website">Company website (leave blank)</label>
+              <input
+                id="company-website"
+                name="company-website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <Field
                 id="name"

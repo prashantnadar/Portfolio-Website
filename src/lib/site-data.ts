@@ -60,13 +60,16 @@ export const SKILL_GROUPS: {
   },
   {
     category: "Other",
-    description: "Engineering practices that make products production-ready.",
+    description: "Engineering practices and everyday tools that make products production-ready.",
     items: [
       "API Integration",
       "Component Architecture",
       "Performance Optimization",
       "Accessibility",
       "SEO Friendly Development",
+      "Canva",
+      "MS Excel",
+      "MS Word",
     ],
   },
 ];
@@ -298,7 +301,7 @@ export const FAQS = [
   },
   {
     q: "Are the projects in your portfolio live?",
-    a: "Ask Legal Vision and Universal Tools (universaltools.in) are live products; Task Manager is a React CRUD application showcasing state management and routing.",
+    a: "Yes — Universal Tools (universaltools.in), Power Consilium System and Ask Legal Vision are all live in production, and each has a detailed case study on this site.",
   },
   {
     q: "Do you offer support after launch?",

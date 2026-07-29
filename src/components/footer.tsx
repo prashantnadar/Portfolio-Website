@@ -142,20 +142,15 @@ export function Footer() {
               rel="noreferrer noopener"
               title="Prashant Nadar on Instagram"
               aria-label="Prashant Nadar on Instagram (opens in a new tab)"
-              initial={{ backgroundSize: "0% 100%" }}
-              whileInView={{ backgroundSize: "100% 100%" }}
+              initial={{ opacity: 0.65 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true, amount: 0.6 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, color-mix(in oklab, var(--primary) 18%, transparent), color-mix(in oklab, var(--primary) 18%, transparent))",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "left center",
-              }}
-              className="rounded px-1 font-semibold text-primary underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="font-semibold text-primary underline-offset-4 transition-colors hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
               Prashant
             </motion.a>
+
             <span>·</span>
             <span>
               Freelance Services powered by{" "}
