@@ -57,8 +57,44 @@ function validate(): { nodes: string[]; issues: Issue[]; ids: string[] } {
   return { nodes, issues, ids };
 }
 
+/** Fetches a text asset and lints it for common indexing mistakes. */
+async function loadAsset(path: string): Promise<{ text: string; issues: Issue[] }> {
+  const issues: Issue[] = [];
+  let text = "";
+  try {
+    const res = await fetch(path, { cache: "no-store" });
+    text = await res.text();
+    if (!res.ok) issues.push({ level: "error", message: `${path} returned ${res.status}` });
+  } catch {
+    return { text: "", issues: [{ level: "error", message: `${path} could not be fetched` }] };
+  }
+
+  if (path.endsWith(".xml")) {
+    if (!text.trimStart().startsWith("<?xml")) issues.push({ level: "error", message: "Missing XML declaration" });
+    if (!text.includes("<urlset") && !text.includes("<sitemapindex"))
+      issues.push({ level: "error", message: "No <urlset>/<sitemapindex> root" });
+    const locs = [...text.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
+    if (!locs.length) issues.push({ level: "error", message: "Sitemap contains no <loc> entries" });
+    if (new Set(locs).size !== locs.length) issues.push({ level: "warn", message: "Duplicate <loc> entries" });
+    if (locs.some((l) => !l.startsWith("http")))
+      issues.push({ level: "warn", message: "Relative <loc> — set BASE_URL once a domain is live" });
+  } else {
+    if (/^\s*disallow:\s*\/\s*$/im.test(text))
+      issues.push({ level: "error", message: "Disallow: / blocks all crawlers" });
+    if (!/user-agent:/i.test(text)) issues.push({ level: "error", message: "No User-agent block" });
+    if (!/sitemap:/i.test(text))
+      issues.push({ level: "warn", message: "No Sitemap: directive (fine until a domain is set)" });
+  }
+  return { text, issues };
+}
+
+type Tab = "schema" | "sitemap" | "robots";
+
 export function SeoDebugPanel() {
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<Tab>("schema");
+  const [assets, setAssets] = useState<Record<string, { text: string; issues: Issue[] }>>({});
+  const [copied, setCopied] = useState("");
   const [report, setReport] = useState<ReturnType<typeof validate> | null>(null);
 
   useEffect(() => {
