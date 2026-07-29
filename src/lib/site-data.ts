@@ -51,12 +51,12 @@ export const SKILL_GROUPS: {
   {
     category: "Tools",
     description: "Day-to-day workflow, versioning and build tooling.",
-    items: ["Git", "GitHub", "Jira", "npm", "Vite", "Webpack"],
+    items: ["Git", "GitHub", "Jira", "npm", "Vite", "Webpack", "Lighthouse", "Vercel", "Netlify"],
   },
   {
     category: "Database",
     description: "Querying and shaping data behind the interface.",
-    items: ["PostgreSQL", "MS SQL", "SQL Querying", "Data Manipulation"],
+    items: ["PostgreSQL", "MySQL", "MS SQL", "SQL Querying", "Data Manipulation"],
   },
   {
     category: "Other",

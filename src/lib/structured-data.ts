@@ -24,6 +24,12 @@ const PROJECTS = [
     description:
       "A modular multi-utility web platform bundling 110+ text, PDF, image, code, color, password and productivity tools, with PostgreSQL-backed accounts and privacy-first in-browser processing.",
     author: { "@id": PERSON_ID },
+    subjectOf: {
+      "@type": "Article",
+      "@id": "/projects/universal-tools#article",
+      name: "Universal Tools case study",
+      url: "/projects/universal-tools",
+    },
     offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
   },
   {
@@ -34,6 +40,12 @@ const PROJECTS = [
     description:
       "Corporate website for Power Consilium System (PCS), a Mumbai-based UPS and power infrastructure company offering pan-India UPS AMC, card-level repairing, battery supply and energy audits.",
     creator: { "@id": PERSON_ID },
+    subjectOf: {
+      "@type": "Article",
+      "@id": "/projects/power-consilium-system#article",
+      name: "Power Consilium System case study",
+      url: "/projects/power-consilium-system",
+    },
   },
   {
     "@type": "WebSite",
@@ -43,6 +55,12 @@ const PROJECTS = [
     description:
       "Production legal-services website for Adv. Aditya Shankar Kharche, Bombay High Court — employment law, civil litigation and compliance — built with React, Tailwind CSS, PHP and MySQL.",
     creator: { "@id": PERSON_ID },
+    subjectOf: {
+      "@type": "Article",
+      "@id": "/projects/ask-legal-vision#article",
+      name: "Ask Legal Vision case study",
+      url: "/projects/ask-legal-vision",
+    },
   },
 ];
 
@@ -161,7 +179,11 @@ export function buildHomeSchema(title: string, description: string) {
         "@type": "ItemList",
         "@id": "/#projects",
         name: "Selected projects by Prashant Nadar",
-        itemListElement: PROJECTS.map((item, i) => ({ "@type": "ListItem", position: i + 1, item })),
+        itemListElement: PROJECTS.map((item, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item,
+        })),
       },
       faqPage,
     ],
