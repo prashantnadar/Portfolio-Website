@@ -19,41 +19,49 @@ const TOOL_CATEGORIES = [
   {
     icon: Type,
     name: "Text Tools",
+    href: "https://universaltools.in/tools/text",
     blurb: "Case converters, word & character counters, cleaners, formatters.",
   },
   {
     icon: Zap,
     name: "Productivity Tools",
+    href: "https://universaltools.in/tools/productivity",
     blurb: "Timers, notes, unit converters and everyday utilities in one tab.",
   },
   {
     icon: Braces,
     name: "Developer Tools",
+    href: "https://universaltools.in/tools/code",
     blurb: "JSON formatter, base64, URL encode/decode, regex helpers.",
   },
   {
     icon: Palette,
     name: "Color Tools",
+    href: "https://universaltools.in/tools/color",
     blurb: "Pickers, HEX/RGB/HSL converters, palettes and contrast checks.",
   },
   {
     icon: FileText,
     name: "Code Tools",
+    href: "https://universaltools.in/tools/code",
     blurb: "Minifiers, beautifiers and quick snippet playgrounds.",
   },
   {
     icon: KeyRound,
     name: "Password Tools",
+    href: "https://universaltools.in/tools/password",
     blurb: "Strong password generator and strength analysis, done client-side.",
   },
   {
     icon: ImageIcon,
     name: "Image Tools",
+    href: "https://universaltools.in/tools/image",
     blurb: "Compress, convert, resize and crop images without uploads.",
   },
   {
     icon: Wrench,
     name: "PDF Tools",
+    href: "https://universaltools.in/tools/pdf",
     blurb: "Merge, split, compress and convert PDFs in a couple of clicks.",
   },
 ] as const;
@@ -111,10 +119,12 @@ export function UniversalToolsPromo() {
       </Reveal>
 
       <StaggerGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" gap={0.06}>
-        {TOOL_CATEGORIES.map(({ icon: Icon, name, blurb }) => (
+        {TOOL_CATEGORIES.map(({ icon: Icon, name, blurb, href }) => (
           <motion.a
             key={name}
-            href={SITE_URL}
+            href={href}
+            title={`Open ${name} on universaltools.in`}
+            aria-label={`Open ${name} on universaltools.in (opens in a new tab)`}
             target="_blank"
             rel="noreferrer noopener"
             variants={fadeUp}
