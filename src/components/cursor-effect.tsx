@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 /**
@@ -63,7 +63,7 @@ export function CursorEffect() {
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[60] hidden lg:block">
       {/* soft trailing glow */}
       <motion.div
-        style={{ x: glowX, y: glowY, translateX: velX ? 0 : 0 }}
+        style={{ x: glowX, y: glowY }}
         className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
