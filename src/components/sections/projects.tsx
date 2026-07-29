@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Star } from "lucide-react";
 
-import legalAvif from "@/assets/project-legal.jpg?w=640;960;1440&format=avif&as=srcset";
-import legalImg from "@/assets/project-legal.jpg?w=1024&format=jpg";
-import legalWebp from "@/assets/project-legal.jpg?w=640;960;1440&format=webp&as=srcset";
+import legalAvif from "@/assets/project-legal.png?w=640;960;1440&format=avif&as=srcset";
+import legalImg from "@/assets/project-legal.png?w=1024&format=jpg";
+import legalWebp from "@/assets/project-legal.png?w=640;960;1440&format=webp&as=srcset";
 import tasksAvif from "@/assets/project-tasks.jpg?w=640;960;1440&format=avif&as=srcset";
 import tasksImg from "@/assets/project-tasks.jpg?w=1024&format=jpg";
 import tasksWebp from "@/assets/project-tasks.jpg?w=640;960;1440&format=webp&as=srcset";
-import toolsAvif from "@/assets/project-tools.jpg?w=640;960;1440&format=avif&as=srcset";
-import toolsImg from "@/assets/project-tools.jpg?w=1024&format=jpg";
-import toolsWebp from "@/assets/project-tools.jpg?w=640;960;1440&format=webp&as=srcset";
+import toolsAvif from "@/assets/project-tools.png?w=640;960;1440&format=avif&as=srcset";
+import toolsImg from "@/assets/project-tools.png?w=1024&format=jpg";
+import toolsWebp from "@/assets/project-tools.png?w=640;960;1440&format=webp&as=srcset";
 import { StaggerGroup, fadeUp } from "@/components/motion/reveal";
 import { ResponsiveImage } from "@/components/responsive-image";
 import { Section } from "@/components/section";
