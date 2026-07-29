@@ -51,6 +51,7 @@ const PROJECT_ENTITIES = [
     "@type": "SoftwareApplication",
     "@id": "/#universal-tools",
     name: "Universal Tools",
+    url: "https://universaltools.in",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Web",
     description:
