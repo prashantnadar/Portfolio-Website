@@ -12,7 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, themeBootstrapScript } from "@/hooks/use-theme";
-import { CursorEffect } from "@/components/cursor-effect";
+import { SeoDebugPanel } from "@/components/seo-debug-panel";
 
 function NotFoundComponent() {
   return (
@@ -125,7 +125,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <CursorEffect />
+        {import.meta.env.DEV ? <SeoDebugPanel /> : null}
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </ThemeProvider>
