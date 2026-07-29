@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, Gamepad2, RotateCcw, Terminal, Trophy, X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Braces, Copy, Terminal } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Reveal, fadeUp, scaleIn, slideLeft, slideRight } from "@/components/motion/reveal";
+import { Reveal, fadeUp, scaleIn, slideLeft } from "@/components/motion/reveal";
 import { Section } from "@/components/section";
 import { cn } from "@/lib/utils";
 
 /* ------------------------------------------------------------------ */
-/* Live code console                                                   */
+/* Live code console — self-typing snippets                            */
 /* ------------------------------------------------------------------ */
 
 const SNIPPETS = [
@@ -84,283 +84,207 @@ function CodeConsole() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Memory match                                                        */
+/* const prashant — interactive object explorer                        */
 /* ------------------------------------------------------------------ */
 
-const TECHS = ["React", "TypeScript", "Tailwind", "Vite", "Redux", "Git"];
-
-interface Tile {
-  id: number;
-  label: string;
-  matched: boolean;
+interface Entry {
+  key: string;
+  value: string;
+  detail: string;
+  type: "string" | "array" | "boolean" | "number";
 }
 
-function shuffle(): Tile[] {
-  return [...TECHS, ...TECHS]
-    .map((label, i) => ({ id: i, label, matched: false }))
-    .sort(() => Math.random() - 0.5)
-    .map((t, i) => ({ ...t, id: i }));
-}
-
-function MemoryGame() {
-  const [tiles, setTiles] = useState<Tile[]>(() =>
-    [...TECHS, ...TECHS].map((label, i) => ({ id: i, label, matched: false })),
-  );
-  const [flipped, setFlipped] = useState<number[]>([]);
-  const [moves, setMoves] = useState(0);
-  const [started, setStarted] = useState(false);
-
-  const reset = useCallback(() => {
-    setTiles(shuffle());
-    setFlipped([]);
-    setMoves(0);
-    setStarted(true);
-  }, []);
-
-  useEffect(() => {
-    if (flipped.length !== 2) return;
-    const [a, b] = flipped;
-    const timer = setTimeout(() => {
-      setTiles((prev) =>
-        prev[a].label === prev[b].label
-          ? prev.map((t, i) => (i === a || i === b ? { ...t, matched: true } : t))
-          : prev,
-      );
-      setFlipped([]);
-    }, 650);
-    return () => clearTimeout(timer);
-  }, [flipped]);
-
-  const won = started && tiles.every((t) => t.matched);
-
-  const onFlip = (index: number) => {
-    if (!started) {
-      reset();
-      return;
-    }
-    if (flipped.length === 2 || flipped.includes(index) || tiles[index].matched) return;
-    setFlipped((f) => [...f, index]);
-    if (flipped.length === 1) setMoves((m) => m + 1);
-  };
-
-  return (
-    <Reveal variants={slideRight} className="min-w-0">
-      <div className="flex h-full flex-col rounded-3xl border border-border bg-card p-5 shadow-soft sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="inline-flex items-center gap-2 text-base font-semibold">
-            <Gamepad2 className="h-4.5 w-4.5 text-primary" aria-hidden="true" />
-            Stack Memory Match
-          </h3>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-medium text-muted-foreground">Moves: {moves}</span>
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-            >
-              <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
-              {started ? "Restart" : "Start"}
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 grid grid-cols-3 gap-2.5 sm:grid-cols-4">
-          {tiles.map((tile, i) => {
-            const revealed = tile.matched || flipped.includes(i);
-            return (
-              <motion.button
-                key={tile.id}
-                type="button"
-                onClick={() => onFlip(i)}
-                whileTap={{ scale: 0.94 }}
-                animate={{ rotateY: revealed ? 180 : 0 }}
-                transition={{ duration: 0.35 }}
-                aria-label={revealed ? tile.label : "Hidden tile"}
-                className={cn(
-                  "grid aspect-square min-h-16 place-items-center rounded-xl border px-1 text-center text-[11px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-xs",
-                  tile.matched
-                    ? "border-primary/50 bg-primary/15 text-primary"
-                    : revealed
-                      ? "border-primary/30 bg-surface text-foreground"
-                      : "border-border bg-surface text-lg text-primary/35 hover:border-primary/40",
-                )}
-              >
-                <span style={{ transform: revealed ? "rotateY(180deg)" : undefined }}>
-                  {revealed ? tile.label : "?"}
-                </span>
-              </motion.button>
-            );
-          })}
-        </div>
-
-        <AnimatePresence>
-          {won ? (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary"
-            >
-              <Trophy className="h-4 w-4" aria-hidden="true" />
-              Cleared in {moves} moves — nice pattern recognition.
-            </motion.p>
-          ) : (
-            <p className="mt-5 text-xs text-muted-foreground">
-              Match every pair of my core stack. Built with React state only — no game library.
-            </p>
-          )}
-        </AnimatePresence>
-      </div>
-    </Reveal>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Frontend quiz                                                       */
-/* ------------------------------------------------------------------ */
-
-const QUESTIONS = [
+const ENTRIES: Entry[] = [
   {
-    q: "Which hook memoises an expensive computed value?",
-    options: ["useEffect", "useMemo", "useRef", "useState"],
-    answer: 1,
+    key: "role",
+    value: `"Frontend Developer"`,
+    detail: "React + TypeScript specialist shipping production interfaces since 2024.",
+    type: "string",
   },
   {
-    q: "What does CLS measure in Core Web Vitals?",
-    options: ["Server latency", "Bundle size", "Visual layout shift", "Cache hits"],
-    answer: 2,
+    key: "stack",
+    value: `["React", "TypeScript", "Tailwind", "Redux"]`,
+    detail: "Component-driven architecture, strict typing, utility-first styling.",
+    type: "array",
   },
   {
-    q: "Which attribute defers offscreen image loading natively?",
-    options: [`loading="lazy"`, `defer`, `async`, `preload`],
-    answer: 0,
+    key: "obsessions",
+    value: `["performance", "accessibility", "motion"]`,
+    detail: "Lighthouse 95+, keyboard-first flows and animation that guides attention.",
+    type: "array",
   },
   {
-    q: "Which element best wraps a page's primary navigation?",
-    options: ["<div>", "<nav>", "<aside>", "<section>"],
-    answer: 1,
+    key: "lighthouseTarget",
+    value: "95",
+    detail: "Every build is audited before handover — performance, a11y, SEO, best practices.",
+    type: "number",
   },
   {
-    q: "In TypeScript, what does `as const` do to an array literal?",
-    options: [
-      "Deep-freezes it at runtime",
-      "Makes it a readonly tuple of literal types",
-      "Converts it to an enum",
-      "Nothing — it's a comment",
-    ],
-    answer: 1,
+    key: "respondsWithin",
+    value: `"24 hours"`,
+    detail: "Clear updates, no ghosting. Async-friendly across time zones.",
+    type: "string",
+  },
+  {
+    key: "openToWork",
+    value: "true",
+    detail: "Available for full-time roles and PN Creation freelance projects.",
+    type: "boolean",
   },
 ];
 
-function Quiz() {
-  const [step, setStep] = useState(0);
-  const [picked, setPicked] = useState<number | null>(null);
-  const [score, setScore] = useState(0);
-  const done = step >= QUESTIONS.length;
-  const current = QUESTIONS[Math.min(step, QUESTIONS.length - 1)];
-  const progress = useMemo(() => Math.round((step / QUESTIONS.length) * 100), [step]);
+const TYPE_CLASS: Record<Entry["type"], string> = {
+  string: "text-primary",
+  array: "text-primary-soft",
+  boolean: "text-destructive",
+  number: "text-primary",
+};
 
-  const choose = (i: number) => {
-    if (picked !== null) return;
-    setPicked(i);
-    if (i === current.answer) setScore((s) => s + 1);
-    setTimeout(() => {
-      setPicked(null);
-      setStep((s) => s + 1);
-    }, 800);
-  };
+function ConstPrashant() {
+  const [active, setActive] = useState<string | null>(ENTRIES[0].key);
+  const [copied, setCopied] = useState(false);
 
-  const restart = () => {
-    setStep(0);
-    setPicked(null);
-    setScore(0);
+  const activeEntry = ENTRIES.find((e) => e.key === active) ?? null;
+
+  const copy = async () => {
+    const text = `const prashant = {\n${ENTRIES.map((e) => `  ${e.key}: ${e.value},`).join("\n")}\n} as const;`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
     <Reveal variants={slideLeft} className="min-w-0">
       <div className="flex h-full flex-col rounded-3xl border border-border bg-card p-5 shadow-soft sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-base font-semibold">Frontend Quick Quiz</h3>
-          <span className="text-xs font-medium text-muted-foreground">
-            Score {score}/{QUESTIONS.length}
-          </span>
+          <h3 className="inline-flex items-center gap-2 text-base font-semibold">
+            <Braces className="h-4.5 w-4.5 text-primary" aria-hidden="true" />
+            const prashant
+          </h3>
+          <button
+            type="button"
+            onClick={copy}
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+            {copied ? "Copied!" : "Copy object"}
+          </button>
         </div>
 
-        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface">
-          <motion.div
-            className="h-full rounded-full bg-primary"
-            animate={{ width: `${done ? 100 : progress}%` }}
-            transition={{ type: "spring", stiffness: 160, damping: 24 }}
-          />
-        </div>
+        <pre className="mt-5 overflow-x-auto font-mono text-[12.5px] leading-relaxed sm:text-[13px]">
+          <code>
+            <span className="text-muted-foreground">const</span>{" "}
+            <span className="font-semibold text-foreground">prashant</span>{" "}
+            <span className="text-muted-foreground">= {"{"}</span>
+            {"\n"}
+            {ENTRIES.map((entry) => (
+              <button
+                key={entry.key}
+                type="button"
+                onMouseEnter={() => setActive(entry.key)}
+                onFocus={() => setActive(entry.key)}
+                onClick={() => setActive(entry.key)}
+                className={cn(
+                  "block w-full rounded-md px-2 py-0.5 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                  active === entry.key ? "bg-primary/10" : "hover:bg-surface",
+                )}
+              >
+                <span className="text-muted-foreground">{"  "}</span>
+                <span className="font-semibold text-foreground">{entry.key}</span>
+                <span className="text-muted-foreground">: </span>
+                <span className={TYPE_CLASS[entry.type]}>{entry.value}</span>
+                <span className="text-muted-foreground">,</span>
+              </button>
+            ))}
+            <span className="text-muted-foreground">
+              {"}"} as const;
+            </span>
+          </code>
+        </pre>
 
         <AnimatePresence mode="wait">
-          {done ? (
-            <motion.div
-              key="done"
-              initial={{ opacity: 0, y: 10 }}
+          {activeEntry ? (
+            <motion.p
+              key={activeEntry.key}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="mt-6 flex flex-1 flex-col justify-center text-center"
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="mt-5 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-muted-foreground"
             >
-              <Trophy className="mx-auto h-8 w-8 text-primary" aria-hidden="true" />
-              <p className="mt-3 font-display text-2xl font-bold">
-                {score}/{QUESTIONS.length}
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {score === QUESTIONS.length
-                  ? "Perfect score — we'd get along well."
-                  : "Nicely done. These are the details I obsess over daily."}
-              </p>
-              <button
-                type="button"
-                onClick={restart}
-                className="mx-auto mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-sm font-semibold transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-              >
-                <RotateCcw className="h-4 w-4" aria-hidden="true" />
-                Play again
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -24 }}
-              transition={{ duration: 0.3 }}
-              className="mt-5 flex-1"
-            >
-              <p className="text-sm font-semibold">
-                {step + 1}. {current.q}
-              </p>
-              <ul className="mt-4 space-y-2.5">
-                {current.options.map((option, i) => {
-                  const isAnswer = i === current.answer;
-                  const state =
-                    picked === null ? "idle" : isAnswer ? "correct" : picked === i ? "wrong" : "idle";
-                  return (
-                    <li key={option}>
-                      <button
-                        type="button"
-                        onClick={() => choose(i)}
-                        className={cn(
-                          "flex min-h-11 w-full items-center justify-between gap-3 rounded-xl border px-4 py-2.5 text-left font-mono text-xs transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-sm",
-                          state === "correct" && "border-primary/60 bg-primary/10 text-primary",
-                          state === "wrong" && "border-destructive/50 bg-destructive/10 text-destructive",
-                          state === "idle" && "border-border bg-surface hover:border-primary/40",
-                        )}
-                      >
-                        <span className="min-w-0 break-words">{option}</span>
-                        {state === "correct" ? <Check className="h-4 w-4 shrink-0" aria-hidden="true" /> : null}
-                        {state === "wrong" ? <X className="h-4 w-4 shrink-0" aria-hidden="true" /> : null}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </motion.div>
-          )}
+              <span className="font-mono font-semibold text-primary">.{activeEntry.key}</span> —{" "}
+              {activeEntry.detail}
+            </motion.p>
+          ) : null}
         </AnimatePresence>
+
+        <p className="mt-4 text-xs text-muted-foreground">
+          Hover, tab or tap any property to inspect it — plain React state, no libraries.
+        </p>
+      </div>
+    </Reveal>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* npx prashant — animated terminal                                    */
+/* ------------------------------------------------------------------ */
+
+const LINES = [
+  { text: "$ npx create-prashant-app my-product", tone: "cmd" },
+  { text: "✔ Scanning requirements ......... done", tone: "ok" },
+  { text: "✔ Designing system tokens ....... done", tone: "ok" },
+  { text: "✔ Building components (React 19)  done", tone: "ok" },
+  { text: "✔ Auditing Lighthouse ........... 98/100", tone: "ok" },
+  { text: "✔ Shipping to production ........ done", tone: "ok" },
+  { text: "→ Ready in 0.42s. Let's build yours.", tone: "note" },
+] as const;
+
+function BuildTerminal() {
+  const [visible, setVisible] = useState(1);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVisible(LINES.length);
+      return;
+    }
+    if (visible < LINES.length) {
+      const t = setTimeout(() => setVisible((v) => v + 1), 620);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => setVisible(1), 4200);
+    return () => clearTimeout(t);
+  }, [visible]);
+
+  return (
+    <Reveal variants={fadeUp} className="min-w-0">
+      <div className="h-full rounded-3xl border border-border bg-card p-5 font-mono shadow-soft sm:p-6">
+        <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
+          zsh — prashant@mumbai
+        </div>
+        <div className="mt-4 min-h-44 space-y-1.5 text-[12.5px] leading-relaxed sm:text-[13px]">
+          {LINES.slice(0, visible).map((line) => (
+            <motion.p
+              key={line.text}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.25 }}
+              className={cn(
+                "break-words",
+                line.tone === "cmd" && "font-semibold text-foreground",
+                line.tone === "ok" && "text-muted-foreground",
+                line.tone === "note" && "text-primary",
+              )}
+            >
+              {line.text}
+            </motion.p>
+          ))}
+        </div>
       </div>
     </Reveal>
   );
@@ -373,16 +297,16 @@ export function Playground() {
     <Section
       id="playground"
       eyebrow="Dev Playground"
-      title="Code you can actually play with"
-      description="A few interactive pieces built from scratch with React state and Framer Motion — no game engines, no plugins. Because the fastest way to judge a frontend developer is to use what they built."
+      title="A look at how I think in code"
+      description="Interactive pieces built from scratch with React state and Framer Motion — the fastest way to judge a frontend developer is to use what they built."
       className="bg-surface/60"
     >
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <ConstPrashant />
         <CodeConsole />
-        <Quiz />
       </div>
       <div className="mt-5">
-        <MemoryGame />
+        <BuildTerminal />
       </div>
       <Reveal variants={fadeUp} className="mt-8 text-center text-xs text-muted-foreground">
         Everything above is keyboard accessible and respects{" "}
