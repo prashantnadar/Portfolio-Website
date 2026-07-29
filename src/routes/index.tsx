@@ -20,6 +20,9 @@ const Skills = lazy(() =>
 const Playground = lazy(() =>
   import("@/components/sections/playground").then((m) => ({ default: m.Playground })),
 );
+const UniversalToolsPromo = lazy(() =>
+  import("@/components/sections/universal-tools").then((m) => ({ default: m.UniversalToolsPromo })),
+);
 const Experience = lazy(() =>
   import("@/components/sections/experience").then((m) => ({ default: m.Experience })),
 );
