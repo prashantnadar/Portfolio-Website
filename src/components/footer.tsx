@@ -148,7 +148,7 @@ export function Footer() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               style={{
                 backgroundImage:
-                  "linear-gradient(to right, hsl(var(--primary) / 0.18), hsl(var(--primary) / 0.18))",
+                  "linear-gradient(to right, color-mix(in oklab, var(--primary) 18%, transparent), color-mix(in oklab, var(--primary) 18%, transparent))",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "left center",
               }}
