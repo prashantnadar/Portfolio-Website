@@ -262,6 +262,19 @@ export function Contact() {
             aria-busy={submitting}
             className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
           >
+            {/* Honeypot — hidden from users and assistive tech, bots fill it. */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label htmlFor="company-website">Company website (leave blank)</label>
+              <input
+                id="company-website"
+                name="company-website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <Field
                 id="name"
