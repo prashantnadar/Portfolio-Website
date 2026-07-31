@@ -7,6 +7,8 @@ import { Reveal, StaggerGroup, fadeUp } from "@/components/motion/reveal";
 import { ResponsiveImage } from "@/components/responsive-image";
 import { PROJECTS, getProject, type Project } from "@/lib/projects-data";
 
+const SITE = "https://prashant-nadar.lovable.app";
+
 export const Route = createFileRoute("/projects/$slug")({
   loader: ({ params }) => {
     const project = getProject(params.slug);
@@ -25,19 +27,22 @@ export const Route = createFileRoute("/projects/$slug")({
     }
     const title = `${project.title} Case Study — Prashant Nadar`;
     const description = project.caseStudy.summary;
-    const url = `/projects/${params.slug}`;
+    const url = `${SITE}/projects/${params.slug}`;
     return {
       meta: [
         { title },
         { name: "description", content: description },
+        { name: "keywords", content: project.stack.join(", ") },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
       ],
       links: [{ rel: "canonical", href: url }],
+
       scripts: [
         {
           type: "application/ld+json",
