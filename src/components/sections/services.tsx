@@ -131,9 +131,7 @@ export function Services() {
               transition={{ type: "spring", stiffness: 240, damping: 22 }}
               className={cn(
                 "relative flex h-full flex-col overflow-hidden rounded-3xl border p-7 shadow-soft",
-                plan.highlighted
-                  ? "border-primary/50 bg-card ring-2 ring-primary/30 lg:-translate-y-3"
-                  : "border-border bg-card",
+                plan.highlighted ? "border-primary/50 bg-card ring-2 ring-primary/30" : "border-border bg-card",
               )}
             >
               {plan.highlighted ? (
@@ -142,12 +140,17 @@ export function Services() {
                     aria-hidden="true"
                     className="pointer-events-none absolute -top-24 -right-20 h-52 w-52 rounded-full bg-primary/15 blur-3xl"
                   />
-                  <span className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-primary-foreground shadow-glow">
+                  {/* Badge sits in normal flow so it can never clip against the card edge */}
+                  <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-primary-foreground shadow-glow">
                     <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
                     Most complete
                   </span>
                 </>
-              ) : null}
+              ) : (
+                // Invisible spacer keeps all three cards aligned on the same baseline
+                <span aria-hidden="true" className="h-[30px]" />
+              )}
+
 
               <h4 className="mt-2 text-lg font-semibold">{plan.tier}</h4>
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{plan.tagline}</p>

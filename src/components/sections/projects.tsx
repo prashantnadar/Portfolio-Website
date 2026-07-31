@@ -74,11 +74,12 @@ export function Projects() {
                 </div>
               </div>
               {project.featured ? (
-                <span className="absolute top-6 left-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow sm:top-7 sm:left-7">
-                  <Star className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="absolute top-1 right-1 inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[11px] leading-none font-semibold text-primary-foreground shadow-glow ring-1 ring-background/60 sm:top-2 sm:right-2 sm:px-3 sm:py-1.5 sm:text-xs">
+                  <Star className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
                   Featured project
                 </span>
               ) : null}
+
             </div>
 
             <div className="flex flex-1 flex-col p-6 sm:p-7">
