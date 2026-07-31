@@ -6,7 +6,6 @@ import { BackToTop } from "@/components/back-to-top";
 import { Footer } from "@/components/footer";
 import { SectionFallback } from "@/components/loading-screen";
 import { Navbar } from "@/components/navbar";
-import { ScrollProgress } from "@/components/scroll-progress";
 import { Hero } from "@/components/sections/hero";
 import { buildHomeSchema } from "@/lib/structured-data";
 
@@ -75,7 +74,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="min-h-dvh overflow-x-hidden">
-      <ScrollProgress />
       <Navbar />
       <motion.main
         id="main"
