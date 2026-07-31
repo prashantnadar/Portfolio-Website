@@ -71,7 +71,7 @@ const recentSubmits = (): number[] => {
 
 const MAX_LENGTH = {
   name: 30,
-  email: 254,
+  email: 80,
   subject: 30,
   message: 500,
 } as const;

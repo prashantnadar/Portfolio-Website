@@ -173,75 +173,132 @@ export const submitContact = createServerFn({ method: "POST" })
     /* ---------------------------------------------------------------------- */
 
     try {
-      const { data: email, error } = await resend.emails.send({
-        from: "Portfolio Contact <onboarding@resend.dev>",
+      // Send your notification and visitor auto-reply in parallel.
+      const [ownerResult, userResult] = await Promise.all([
+        resend.emails.send({
+          from: "Portfolio Contact <onboarding@resend.dev>",
+          to: SITE.email,
+          replyTo: data.email,
+          subject: `Portfolio Contact: ${safeSubject}`,
 
-        to: SITE.email,
+          html: `
+        <h2>New Portfolio Enquiry</h2>
 
-        replyTo: data.email,
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
 
-        subject: `Portfolio Contact: ${data.subject}`,
+        <hr>
 
-        html: `
-<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#222">
-
-<h2 style="margin-bottom:20px">
-📩 New Portfolio Enquiry
-</h2>
-
-<table cellpadding="6" cellspacing="0">
-<tr>
-<td><strong>Name</strong></td>
-<td>${safeName}</td>
-</tr>
-
-<tr>
-<td><strong>Email</strong></td>
-<td>${safeEmail}</td>
-</tr>
-
-<tr>
-<td><strong>Subject</strong></td>
-<td>${safeSubject}</td>
-</tr>
-</table>
-
-<hr style="margin:24px 0">
-
-<strong>Message</strong>
-
-<div
-style="
-margin-top:12px;
-padding:16px;
-background:#f8f8f8;
-border:1px solid #e5e5e5;
-border-radius:8px;
-white-space:pre-wrap;
-">
+        <p style="white-space:pre-wrap;">
 ${safeMessage}
-</div>
+        </p>
+      `,
 
-</div>
-`,
-
-        text: `
+          text: `
 New Portfolio Enquiry
 
 Name: ${data.name}
-
 Email: ${data.email}
-
 Subject: ${data.subject}
 
----------------------------------------
-
+Message:
 ${data.message}
 `,
-      });
+        }),
 
-      if (error) {
-        console.error("Resend error:", error);
+        resend.emails.send({
+          from: "Prashant Nadar <onboarding@resend.dev>",
+          to: data.email,
+          subject: "Thanks for contacting me!",
+
+          html: `
+<div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,sans-serif;line-height:1.7;color:#333;">
+
+  <h2 style="margin-top:0;">Hi ${safeName}, 👋</h2>
+
+  <p>Thank you for contacting me through my portfolio website.</p>
+
+  <p>I've successfully received your message and will review it shortly.</p>
+
+  <p><strong>I'll get back to you within 24 hours.</strong></p>
+
+  <hr style="margin:24px 0;">
+
+  <h3 style="margin-bottom:12px;">While you're waiting</h3>
+
+  <p>You can explore my recent work and pricing.</p>
+
+  <p>
+    🚀
+    <a href="https://prashant-nadar.vercel.app/#projects"
+       style="color:#2563eb;text-decoration:none;font-weight:600;">
+      View Projects
+    </a>
+  </p>
+
+  <p>
+    💰
+    <a href="https://prashant-nadar.vercel.app/#pricing"
+       style="color:#2563eb;text-decoration:none;font-weight:600;">
+      View Pricing
+    </a>
+  </p>
+
+  <hr style="margin:24px 0;">
+
+  <p><strong>Your message:</strong></p>
+
+  <blockquote
+    style="
+      white-space:pre-wrap;
+      margin:0;
+      padding:12px;
+      background:#f7f7f7;
+      border-left:4px solid #2563eb;
+    ">
+${safeMessage}
+  </blockquote>
+
+  <br>
+
+  <p>
+    Regards,<br>
+    <strong>Prashant Nadar</strong><br>
+    Full Stack Developer
+  </p>
+
+</div>
+`,
+
+          text: `
+Hi ${data.name},
+
+Thank you for contacting me through my portfolio website.
+
+I've successfully received your message and will get back to you within 24 hours.
+
+While you're waiting:
+
+🚀 Projects
+https://prashant-nadar.vercel.app/#projects
+
+💰 Pricing
+https://prashant-nadar.vercel.app/#pricing
+
+Your message:
+${data.message}
+
+Regards,
+Prashant Nadar
+Full Stack Developer
+`,
+        }),
+      ]);
+
+      // Your notification email must succeed.
+      if (ownerResult.error) {
+        console.error("Owner email error:", ownerResult.error);
 
         return {
           ok: false,
@@ -249,17 +306,21 @@ ${data.message}
         };
       }
 
+      // Auto-reply is optional. Log failures without blocking the form.
+      if (userResult.error) {
+        console.warn("Auto-reply email failed:", userResult.error);
+      }
+
       console.info(
         `[contact:accepted] ${JSON.stringify({
           ip,
-          subject: data.subject.trim().slice(0, 60),
-          emailId: email?.id,
+          subject: data.subject.slice(0, 60),
+          ownerEmailId: ownerResult.data?.id,
+          autoReplyEmailId: userResult.data?.id,
         })}`,
       );
 
-      return {
-        ok: true,
-      };
+      return { ok: true };
     } catch (error) {
       console.error("Failed to send email:", error);
 
