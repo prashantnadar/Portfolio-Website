@@ -173,46 +173,14 @@ export const submitContact = createServerFn({ method: "POST" })
     /* ---------------------------------------------------------------------- */
 
     try {
-      // Send your notification and visitor auto-reply in parallel.
-      const [ownerResult, userResult] = await Promise.all([
-        resend.emails.send({
-          from: "Portfolio Contact <onboarding@resend.dev>",
-          to: SITE.email,
-          replyTo: data.email,
-          subject: `Portfolio Contact: ${safeSubject}`,
+      // 1) Send owner notification email
+      const ownerResult = await 
+      resend.emails.send({
+  from: "Prashant Nadar <contact@yourdomain.com>",
+  to: data.email,
+  subject: "Thanks for contacting me!",
 
-          html: `
-        <h2>New Portfolio Enquiry</h2>
-
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Subject:</strong> ${safeSubject}</p>
-
-        <hr>
-
-        <p style="white-space:pre-wrap;">
-${safeMessage}
-        </p>
-      `,
-
-          text: `
-New Portfolio Enquiry
-
-Name: ${data.name}
-Email: ${data.email}
-Subject: ${data.subject}
-
-Message:
-${data.message}
-`,
-        }),
-
-        resend.emails.send({
-          from: "Prashant Nadar <onboarding@resend.dev>",
-          to: data.email,
-          subject: "Thanks for contacting me!",
-
-          html: `
+  html: `
 <div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,sans-serif;line-height:1.7;color:#333;">
 
   <h2 style="margin-top:0;">Hi ${safeName}, 👋</h2>
@@ -222,28 +190,6 @@ ${data.message}
   <p>I've successfully received your message and will review it shortly.</p>
 
   <p><strong>I'll get back to you within 24 hours.</strong></p>
-
-  <hr style="margin:24px 0;">
-
-  <h3 style="margin-bottom:12px;">While you're waiting</h3>
-
-  <p>You can explore my recent work and pricing.</p>
-
-  <p>
-    🚀
-    <a href="https://prashant-nadar.vercel.app/#projects"
-       style="color:#2563eb;text-decoration:none;font-weight:600;">
-      View Projects
-    </a>
-  </p>
-
-  <p>
-    💰
-    <a href="https://prashant-nadar.vercel.app/#pricing"
-       style="color:#2563eb;text-decoration:none;font-weight:600;">
-      View Pricing
-    </a>
-  </p>
 
   <hr style="margin:24px 0;">
 
@@ -271,44 +217,28 @@ ${safeMessage}
 </div>
 `,
 
-          text: `
+  text: `
 Hi ${data.name},
 
 Thank you for contacting me through my portfolio website.
 
 I've successfully received your message and will get back to you within 24 hours.
 
-While you're waiting:
-
-🚀 Projects
-https://prashant-nadar.vercel.app/#projects
-
-💰 Pricing
-https://prashant-nadar.vercel.app/#pricing
-
 Your message:
 ${data.message}
 
 Regards,
 Prashant Nadar
-Full Stack Developer
+Frontend Developer
 `,
-        }),
-      ]);
+}),
+       
+`,
+      });
 
-      // Your notification email must succeed.
-      if (ownerResult.error) {
-        console.error("Owner email error:", ownerResult.error);
-
-        return {
-          ok: false,
-          message: "Unable to send your message right now. Please try again later.",
-        };
-      }
-
-      // Auto-reply is optional. Log failures without blocking the form.
+      // Auto reply failure should not fail the contact form
       if (userResult.error) {
-        console.warn("Auto-reply email failed:", userResult.error);
+        console.warn("Visitor auto-reply failed:", userResult.error);
       }
 
       console.info(
@@ -320,7 +250,9 @@ Full Stack Developer
         })}`,
       );
 
-      return { ok: true };
+      return {
+        ok: true,
+      };
     } catch (error) {
       console.error("Failed to send email:", error);
 
