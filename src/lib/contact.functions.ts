@@ -1,63 +1,154 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestIP } from "@tanstack/react-start/server";
+import { Resend } from "resend";
 import { z } from "zod";
 
-/** Shared schema — reused by the client form so validation can't drift. */
-export const contactSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
-  email: z.string().trim().email("Enter a valid email address").max(255),
-  subject: z.string().trim().min(3, "Add a short subject").max(120),
-  message: z.string().trim().min(10, "Tell me a little more").max(1000, "Message is too long"),
-  // Anti-spam signals sent alongside the payload.
+import { SITE } from "@/lib/site-data";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+/* -------------------------------------------------------------------------- */
+/*                                Validation                                  */
+/* -------------------------------------------------------------------------- */
+
+export const contactFormSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name must be at least 2 characters")
+    .max(30, "Name cannot exceed 30 characters")
+    .regex(
+      /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/,
+      "Name can only contain letters, spaces, apostrophes, and hyphens",
+    ),
+
+  email: z.string().trim().email("Enter a valid email address").max(254, "Email is too long"),
+
+  subject: z
+    .string()
+    .trim()
+    .min(10, "Subject must be at least 10 characters")
+    .max(80, "Subject cannot exceed 80 characters"),
+
+  message: z
+    .string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .max(500, "Message cannot exceed 500 characters"),
+});
+
+/** Shared schema (client + server) */
+export const contactSchema = contactFormSchema.extend({
   honeypot: z.string().max(200).optional().default(""),
   elapsedMs: z.number().nonnegative().max(86_400_000).optional().default(0),
 });
 
 export type ContactInput = z.input<typeof contactSchema>;
-export type ContactResult = { ok: boolean; reason?: "spam" | "rate_limit" | "invalid"; message?: string };
 
-/** Server-side rate limit: per-IP sliding window (survives client tampering). */
-const LIMIT = { max: 3, windowMs: 10 * 60_000, cooldownMs: 30_000, minFillMs: 2500 };
+export type ContactResult = {
+  ok: boolean;
+  reason?: "spam" | "rate_limit" | "invalid";
+  message?: string;
+};
+
+/* -------------------------------------------------------------------------- */
+/*                               Rate Limiting                                */
+/* -------------------------------------------------------------------------- */
+
+const LIMIT = {
+  max: 3,
+  windowMs: 10 * 60_000,
+  cooldownMs: 30_000,
+  minFillMs: 2500,
+};
+
 const hits = new Map<string, number[]>();
 
-/** Blocked attempts are logged so spam patterns show up in server logs. */
+/* -------------------------------------------------------------------------- */
+/*                                  Helpers                                   */
+/* -------------------------------------------------------------------------- */
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function logBlocked(reason: string, ip: string, detail: Record<string, unknown> = {}) {
   console.warn(
-    `[contact:blocked] ${JSON.stringify({ reason, ip, at: new Date().toISOString(), ...detail })}`,
+    `[contact:blocked] ${JSON.stringify({
+      reason,
+      ip,
+      at: new Date().toISOString(),
+      ...detail,
+    })}`,
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*                               Contact Server                               */
+/* -------------------------------------------------------------------------- */
+
 export const submitContact = createServerFn({ method: "POST" })
-  .inputValidator((input: ContactInput) => contactSchema.parse(input))
+  .validator(contactSchema)
   .handler(async ({ data }): Promise<ContactResult> => {
     let ip = "unknown";
+
     try {
       ip = getRequestIP({ xForwardedFor: true }) ?? "unknown";
     } catch {
-      /* no request context (build/prerender) */
+      // Build / prerender
     }
 
-    // 1) Honeypot filled or form submitted implausibly fast → bot.
+    /* ---------------------------------------------------------------------- */
+    /* Bot Protection                                                          */
+    /* ---------------------------------------------------------------------- */
+
     if (data.honeypot.trim() !== "" || data.elapsedMs < LIMIT.minFillMs) {
       logBlocked(data.honeypot.trim() ? "honeypot" : "too_fast", ip, {
         elapsedMs: data.elapsedMs,
-        subject: data.subject.slice(0, 60),
+        subject: data.subject.trim().slice(0, 60),
       });
-      return { ok: false, reason: "spam", message: "This message looked automated and was blocked." };
+
+      return {
+        ok: false,
+        reason: "spam",
+        message: "This message looked automated and was blocked.",
+      };
     }
 
-    // 2) Per-IP sliding window + cooldown between sends.
+    /* ---------------------------------------------------------------------- */
+    /* Rate Limiting                                                           */
+    /* ---------------------------------------------------------------------- */
+
     const now = Date.now();
-    const recent = (hits.get(ip) ?? []).filter((t) => now - t < LIMIT.windowMs);
-    const last = recent[recent.length - 1];
+
+    const recent = (hits.get(ip) ?? []).filter((time) => now - time < LIMIT.windowMs);
+
+    const last = recent.at(-1);
 
     if (last && now - last < LIMIT.cooldownMs) {
       const wait = Math.ceil((LIMIT.cooldownMs - (now - last)) / 1000);
-      logBlocked("cooldown", ip, { waitSeconds: wait });
-      return { ok: false, reason: "rate_limit", message: `Please wait ${wait}s before sending again.` };
+
+      logBlocked("cooldown", ip, {
+        waitSeconds: wait,
+      });
+
+      return {
+        ok: false,
+        reason: "rate_limit",
+        message: `Please wait ${wait} second${wait === 1 ? "" : "s"} before sending another message.`,
+      };
     }
+
     if (recent.length >= LIMIT.max) {
-      logBlocked("rate_limit", ip, { count: recent.length });
+      logBlocked("rate_limit", ip, {
+        count: recent.length,
+      });
+
       return {
         ok: false,
         reason: "rate_limit",
@@ -67,6 +158,114 @@ export const submitContact = createServerFn({ method: "POST" })
 
     recent.push(now);
     hits.set(ip, recent);
-    console.info(`[contact:accepted] ${JSON.stringify({ ip, subject: data.subject.slice(0, 60) })}`);
-    return { ok: true };
+
+    /* ---------------------------------------------------------------------- */
+    /* Escape HTML                                                             */
+    /* ---------------------------------------------------------------------- */
+
+    const safeName = escapeHtml(data.name);
+    const safeEmail = escapeHtml(data.email);
+    const safeSubject = escapeHtml(data.subject);
+    const safeMessage = escapeHtml(data.message);
+
+    /* ---------------------------------------------------------------------- */
+    /* Send Email                                                              */
+    /* ---------------------------------------------------------------------- */
+
+    try {
+      const { data: email, error } = await resend.emails.send({
+        from: "Portfolio Contact <onboarding@resend.dev>",
+
+        to: SITE.email,
+
+        replyTo: data.email,
+
+        subject: `Portfolio Contact: ${data.subject}`,
+
+        html: `
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#222">
+
+<h2 style="margin-bottom:20px">
+📩 New Portfolio Enquiry
+</h2>
+
+<table cellpadding="6" cellspacing="0">
+<tr>
+<td><strong>Name</strong></td>
+<td>${safeName}</td>
+</tr>
+
+<tr>
+<td><strong>Email</strong></td>
+<td>${safeEmail}</td>
+</tr>
+
+<tr>
+<td><strong>Subject</strong></td>
+<td>${safeSubject}</td>
+</tr>
+</table>
+
+<hr style="margin:24px 0">
+
+<strong>Message</strong>
+
+<div
+style="
+margin-top:12px;
+padding:16px;
+background:#f8f8f8;
+border:1px solid #e5e5e5;
+border-radius:8px;
+white-space:pre-wrap;
+">
+${safeMessage}
+</div>
+
+</div>
+`,
+
+        text: `
+New Portfolio Enquiry
+
+Name: ${data.name}
+
+Email: ${data.email}
+
+Subject: ${data.subject}
+
+---------------------------------------
+
+${data.message}
+`,
+      });
+
+      if (error) {
+        console.error("Resend error:", error);
+
+        return {
+          ok: false,
+          message: "Unable to send your message right now. Please try again later.",
+        };
+      }
+
+      console.info(
+        `[contact:accepted] ${JSON.stringify({
+          ip,
+          subject: data.subject.trim().slice(0, 60),
+          emailId: email?.id,
+        })}`,
+      );
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.error("Failed to send email:", error);
+
+      return {
+        ok: false,
+        message: "Unable to send your message right now. Please try again later.",
+      };
+    }
   });

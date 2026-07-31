@@ -6,27 +6,41 @@ import { FaGithub, FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa6
 import { z } from "zod";
 
 import { Reveal, StaggerGroup, fadeUp, slideRight } from "@/components/motion/reveal";
-import { submitContact } from "@/lib/contact.functions";
+import { submitContact, contactFormSchema, } from "@/lib/contact.functions";
 import { Section } from "@/components/section";
 import { SITE } from "@/lib/site-data";
 import { cn } from "@/lib/utils";
 
-const contactSchema = z.object({
-  name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
-  email: z.string().trim().email("Enter a valid email address").max(255),
-  subject: z.string().trim().min(3, "Add a short subject").max(120),
-  message: z.string().trim().min(10, "Tell me a little more").max(1000, "Message is too long"),
-});
 
-type ContactValues = z.infer<typeof contactSchema>;
+type ContactValues = z.infer<typeof contactFormSchema>;
 type FieldErrors = Partial<Record<keyof ContactValues, string>>;
 
 const EMPTY: ContactValues = { name: "", email: "", subject: "", message: "" };
 
 const CHANNELS = [
   { label: "Phone", value: SITE.phone, href: SITE.phoneHref, Icon: Phone },
-  { label: "Email", value: SITE.email, href: `mailto:${SITE.email}`, Icon: Mail },
-  { label: "WhatsApp", value: "Chat on WhatsApp", href: SITE.whatsapp, Icon: FaWhatsapp },
+  {
+    label: "Email",
+    value: SITE.email,
+    href: `mailto:${SITE.email}?subject=${encodeURIComponent("Project Inquiry")}&body=${encodeURIComponent(
+      `Hi Prashant,
+
+I came across your portfolio and would like to discuss a project/opportunity with you.
+
+Looking forward to hearing from you.
+
+Thanks!`
+    )}`,
+    Icon: Mail,
+  },
+  {
+    label: "WhatsApp",
+    value: "Chat on WhatsApp",
+    href: `${SITE.whatsapp}?text=${encodeURIComponent(
+      "Hi Prashant, I came across your portfolio and would like to discuss a project/opportunity with you."
+    )}`,
+    Icon: FaWhatsapp,
+  },
 ];
 
 const SOCIALS = [
@@ -55,6 +69,13 @@ const recentSubmits = (): number[] => {
   }
 };
 
+const MAX_LENGTH = {
+  name: 30,
+  email: 254,
+  subject: 30,
+  message: 500,
+} as const;
+
 export function Contact() {
   const sendContact = useServerFn(submitContact);
   const [values, setValues] = useState<ContactValues>(EMPTY);
@@ -66,10 +87,24 @@ export function Contact() {
   const mountedAt = useRef(Date.now());
 
   const update = (key: keyof ContactValues, value: string) => {
-    setValues((prev) => ({ ...prev, [key]: value }));
-    setErrors((prev) => ({ ...prev, [key]: undefined }));
-  };
+    if (key === "name") {
+      value = value.replace(/^\s+/, "");
+    }
 
+    if (key === "email") {
+      value = value.trimStart();
+    }
+
+    setValues((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [key]: undefined,
+    }));
+  };
 
   /** SweetAlert2 themed to match the current light/dark palette. */
   const alert = async (opts: {
@@ -116,7 +151,7 @@ export function Contact() {
       return;
     }
 
-    const parsed = contactSchema.safeParse(values);
+    const parsed = contactFormSchema.safeParse(values);
 
     if (!parsed.success) {
       const next: FieldErrors = {};
@@ -264,7 +299,7 @@ export function Contact() {
             className="rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
           >
             {/* Honeypot — hidden from users and assistive tech, bots fill it. */}
-            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+            <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
               <label htmlFor="company-website">Company website (leave blank)</label>
               <input
                 id="company-website"
@@ -282,14 +317,18 @@ export function Contact() {
                 label="Name"
                 value={values.name}
                 error={errors.name}
+                autoCapitalize="words"
                 onChange={(v) => update("name", v)}
-                placeholder="Your full name"
+                placeholder="John Doe"
                 autoComplete="name"
               />
               <Field
                 id="email"
                 label="Email"
                 type="email"
+                inputMode="email"
+                spellCheck={false}
+                autoCapitalize="none"
                 value={values.email}
                 error={errors.email}
                 onChange={(v) => update("email", v)}
@@ -304,7 +343,7 @@ export function Contact() {
                 value={values.subject}
                 error={errors.subject}
                 onChange={(v) => update("subject", v)}
-                placeholder="Project, role or collaboration"
+                placeholder="Website Development Project"
                 autoComplete="off"
               />
             </div>
@@ -315,16 +354,17 @@ export function Contact() {
               <textarea
                 id="message"
                 rows={5}
-                maxLength={1000}
+                maxLength={500}
                 required
                 autoComplete="off"
                 aria-label="Message"
                 aria-required="true"
+                spellCheck={true}
                 value={values.message}
                 onChange={(e) => update("message", e.target.value)}
                 aria-invalid={Boolean(errors.message)}
                 aria-describedby={errors.message ? "message-error" : undefined}
-                placeholder="Tell me about what you need…"
+                placeholder="Describe your project, requirement, or inquiry..."
                 className={cn(fieldClass, "resize-y", errors.message && "border-destructive")}
               />
               {errors.message ? (
@@ -357,7 +397,7 @@ export function Contact() {
           </form>
         </Reveal>
       </div>
-    </Section>
+    </Section >
   );
 }
 
@@ -370,15 +410,21 @@ function Field({
   placeholder,
   type = "text",
   autoComplete,
-}: {
-  id: string;
+  autoCapitalize,
+  inputMode,
+  spellCheck,
+}:{
+  id: keyof typeof MAX_LENGTH;
   label: string;
   value: string;
   error?: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  type?: string;
   autoComplete?: string;
+  type?: "text" | "email";
+  inputMode?: "text" | "email" | "search" | "tel" | "url" | "numeric" | "decimal";
+  autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
+  spellCheck?: boolean;
 }) {
   return (
     <div>
@@ -389,9 +435,12 @@ function Field({
         id={id}
         type={type}
         value={value}
-        maxLength={255}
+        maxLength={MAX_LENGTH[id]}
         required
         autoComplete={autoComplete}
+        autoCapitalize={autoCapitalize}
+        inputMode={inputMode}
+        spellCheck={spellCheck}
         aria-required="true"
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
