@@ -173,67 +173,52 @@ export const submitContact = createServerFn({ method: "POST" })
     /* ---------------------------------------------------------------------- */
 
     try {
-      // 1) Send owner notification email
-      const ownerResult = await 
-      resend.emails.send({
-  from: "Prashant Nadar <contact@yourdomain.com>",
-  to: data.email,
-  subject: "Thanks for contacting me!",
+      const from = "Prashant Nadar <onboarding@resend.dev>";
 
-  html: `
+      // 1) Owner notification
+      const ownerResult = await resend.emails.send({
+        from,
+        to: SITE.email,
+        replyTo: data.email,
+        subject: `New portfolio enquiry: ${data.subject}`,
+        html: `
 <div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,sans-serif;line-height:1.7;color:#333;">
+  <h2 style="margin-top:0;">New contact form message</h2>
+  <p><strong>Name:</strong> ${safeName}</p>
+  <p><strong>Email:</strong> ${safeEmail}</p>
+  <p><strong>Subject:</strong> ${safeSubject}</p>
+  <p><strong>Message:</strong></p>
+  <blockquote style="white-space:pre-wrap;margin:0;padding:12px;background:#f7f7f7;border-left:4px solid #2563eb;">${safeMessage}</blockquote>
+</div>`,
+        text: `New contact form message\n\nName: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}\n\n${data.message}`,
+      });
 
+      if (ownerResult.error) {
+        console.error("Owner notification failed:", ownerResult.error);
+        return {
+          ok: false,
+          message: "Unable to send your message right now. Please try again later.",
+        };
+      }
+
+      // 2) Visitor auto-reply (non-blocking failure)
+      const userResult = await resend.emails.send({
+        from,
+        to: data.email,
+        subject: "Thanks for contacting me!",
+        html: `
+<div style="max-width:600px;margin:auto;padding:20px;font-family:Arial,sans-serif;line-height:1.7;color:#333;">
   <h2 style="margin-top:0;">Hi ${safeName}, 👋</h2>
-
   <p>Thank you for contacting me through my portfolio website.</p>
-
   <p>I've successfully received your message and will review it shortly.</p>
-
   <p><strong>I'll get back to you within 24 hours.</strong></p>
-
   <hr style="margin:24px 0;">
-
   <p><strong>Your message:</strong></p>
-
-  <blockquote
-    style="
-      white-space:pre-wrap;
-      margin:0;
-      padding:12px;
-      background:#f7f7f7;
-      border-left:4px solid #2563eb;
-    ">
-${safeMessage}
-  </blockquote>
-
+  <blockquote style="white-space:pre-wrap;margin:0;padding:12px;background:#f7f7f7;border-left:4px solid #2563eb;">${safeMessage}</blockquote>
   <br>
-
-  <p>
-    Regards,<br>
-    <strong>Prashant Nadar</strong><br>
-    Full Stack Developer
-  </p>
-
-</div>
-`,
-
-  text: `
-Hi ${data.name},
-
-Thank you for contacting me through my portfolio website.
-
-I've successfully received your message and will get back to you within 24 hours.
-
-Your message:
-${data.message}
-
-Regards,
-Prashant Nadar
-Frontend Developer
-`,
-}),
-       
-`,
+  <p>Regards,<br><strong>Prashant Nadar</strong><br>Frontend Developer</p>
+</div>`,
+        text: `Hi ${data.name},\n\nThank you for contacting me through my portfolio website.\n\nI've successfully received your message and will get back to you within 24 hours.\n\nYour message:\n${data.message}\n\nRegards,\nPrashant Nadar\nFrontend Developer`,
       });
 
       // Auto reply failure should not fail the contact form
