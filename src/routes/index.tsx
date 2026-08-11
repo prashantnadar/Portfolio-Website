@@ -8,32 +8,43 @@ import { SectionFallback } from "@/components/loading-screen";
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/sections/hero";
 import { buildHomeSchema } from "@/lib/structured-data";
+import { About } from "@/components/sections/about";
+import { Projects } from "@/components/sections/projects";
 
-const About = lazy(() => import("@/components/sections/about").then((m) => ({ default: m.About })));
-const Projects = lazy(() =>
-  import("@/components/sections/projects").then((m) => ({ default: m.Projects })),
-);
 const Skills = lazy(() =>
   import("@/components/sections/skills").then((m) => ({ default: m.Skills })),
 );
+
 const Playground = lazy(() =>
   import("@/components/sections/playground").then((m) => ({ default: m.Playground })),
 );
+
 const UniversalToolsPromo = lazy(() =>
-  import("@/components/sections/universal-tools").then((m) => ({ default: m.UniversalToolsPromo })),
+  import("@/components/sections/universal-tools").then((m) => ({
+    default: m.UniversalToolsPromo,
+  })),
 );
+
 const Experience = lazy(() =>
   import("@/components/sections/experience").then((m) => ({ default: m.Experience })),
 );
+
 const Services = lazy(() =>
   import("@/components/sections/services").then((m) => ({ default: m.Services })),
 );
+
 const Testimonials = lazy(() =>
-  import("@/components/sections/testimonials").then((m) => ({ default: m.Testimonials })),
+  import("@/components/sections/testimonials").then((m) => ({
+    default: m.Testimonials,
+  })),
 );
+
 const WhyHireMe = lazy(() =>
-  import("@/components/sections/why-hire-me").then((m) => ({ default: m.WhyHireMe })),
+  import("@/components/sections/why-hire-me").then((m) => ({
+    default: m.WhyHireMe,
+  })),
 );
+
 const Contact = lazy(() =>
   import("@/components/sections/contact").then((m) => ({ default: m.Contact })),
 );
